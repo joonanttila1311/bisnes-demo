@@ -1,0 +1,265 @@
+---
+// Hero.astro - High-Converting Hero Section
+// Stack: Astro + Tailwind CSS + Lucide-React
+import { ArrowRight, ChevronRight, Play } from 'lucide-react';
+---
+
+<section class="hero-section relative overflow-hidden bg-white">
+
+  <!-- Subtle background texture & grid -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <!-- Soft radial gradient bloom -->
+    <div
+      class="absolute -top-32 -left-32 h-[600px] w-[600px] rounded-full opacity-20"
+      style="background: radial-gradient(circle, #3b82f6 0%, transparent 70%);"
+    ></div>
+    <div
+      class="absolute -bottom-24 right-0 h-[400px] w-[400px] rounded-full opacity-10"
+      style="background: radial-gradient(circle, #6366f1 0%, transparent 70%);"
+    ></div>
+    <!-- Fine dot-grid overlay -->
+    <div class="absolute inset-0 hero-dots-bg"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-6 py-20 sm:py-28 lg:px-8 lg:py-36">
+
+    <div class="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-12">
+
+      <!-- ── LEFT: Text Column ───────────────────────────────── -->
+      <div class="hero-text flex flex-col items-start">
+
+        <!-- Eyebrow badge -->
+        <div class="mb-6 flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-1.5">
+          <span class="inline-block h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
+          <span class="text-sm font-semibold tracking-wide text-blue-700 uppercase">
+            Asiantuntijapalvelut
+          </span>
+        </div>
+
+        <!-- H1 -->
+        <h1 class="hero-h1 mb-6 font-extrabold leading-tight tracking-tight text-gray-900"
+            style="font-family: 'Sora', 'Segoe UI', sans-serif;">
+          Ratkaisut, jotka<br />
+          <span class="relative inline-block">
+            <span class="relative z-10 text-blue-600">kasvattavat</span>
+            <span
+              class="absolute bottom-1 left-0 z-0 h-3 w-full rounded-sm opacity-20"
+              style="background: #3b82f6;"
+              aria-hidden="true"
+            ></span>
+          </span>
+          &nbsp;liiketoimintaasi
+        </h1>
+
+        <!-- Lead paragraph -->
+        <p class="hero-lead mb-10 max-w-lg leading-relaxed text-gray-600"
+           style="font-family: 'Lora', Georgia, serif;">
+          Tarjoamme räätälöityjä asiantuntijapalveluja, jotka auttavat yritystäsi
+          menestymään kilpailluilla markkinoilla. Kokenut tiimimme on valmis
+          viemään liiketoimintasi seuraavalle tasolle.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap items-center gap-4">
+
+          <!-- Primary CTA -->
+          <a
+            href="#contact"
+            class="cta-primary group inline-flex items-center gap-2.5 rounded-xl bg-blue-600 px-7 py-4 text-base font-bold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-300 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          >
+            Pyydä tarjous
+            <ArrowRight
+              client:load
+              className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+            />
+          </a>
+
+          <!-- Secondary CTA -->
+          <a
+            href="#about"
+            class="cta-secondary group inline-flex items-center gap-2.5 rounded-xl border-2 border-gray-200 bg-white px-7 py-4 text-base font-bold text-gray-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-600 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-200"
+          >
+            Lue lisää
+            <ChevronRight
+              client:load
+              className="h-5 w-5 text-gray-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-blue-500"
+            />
+          </a>
+
+        </div>
+
+        <!-- Social proof strip -->
+        <div class="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-gray-100 pt-8">
+          <div class="text-center">
+            <p class="text-2xl font-extrabold text-gray-900">+240</p>
+            <p class="text-sm text-gray-500">Tyytyväistä asiakasta</p>
+          </div>
+          <div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
+          <div class="text-center">
+            <p class="text-2xl font-extrabold text-gray-900">98%</p>
+            <p class="text-sm text-gray-500">Tyytyväisyysaste</p>
+          </div>
+          <div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
+          <div class="text-center">
+            <p class="text-2xl font-extrabold text-gray-900">12v</p>
+            <p class="text-sm text-gray-500">Kokemus alalta</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── RIGHT: Image Column ─────────────────────────────── -->
+      <div class="hero-image relative flex items-center justify-center lg:justify-end">
+
+        <!-- Decorative geometric accent -->
+        <div
+          class="absolute -right-6 -top-6 h-48 w-48 rounded-3xl border-4 border-blue-100 opacity-60 -z-10"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="absolute -bottom-6 -left-6 h-32 w-32 rounded-full border-4 border-indigo-100 opacity-50 -z-10"
+          aria-hidden="true"
+        ></div>
+
+        <!-- Image wrapper -->
+        <div class="relative w-full max-w-lg">
+
+          <!-- Floating badge card -->
+          <div
+            class="float-card absolute -left-8 top-8 z-20 flex items-center gap-3 rounded-2xl bg-white px-5 py-3.5 shadow-xl ring-1 ring-gray-100 sm:-left-12"
+          >
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-100">
+              <!-- Checkmark SVG -->
+              <svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+            </span>
+            <div>
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Projekti valmis</p>
+              <p class="text-sm font-bold text-gray-900">2 viikkoa etuajassa</p>
+            </div>
+          </div>
+
+          <!-- Floating review card -->
+          <div
+            class="float-card absolute -bottom-6 -right-4 z-20 w-44 rounded-2xl bg-white px-4 py-3.5 shadow-xl ring-1 ring-gray-100 sm:-right-8"
+          >
+            <div class="mb-2 flex gap-0.5">
+              {[...Array(5)].map(() => (
+                <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              ))}
+            </div>
+            <p class="text-xs font-semibold leading-snug text-gray-700">"Erinomaista palvelua alusta loppuun!"</p>
+            <p class="mt-1 text-xs text-gray-400">— Maria K., CEO</p>
+          </div>
+
+          <!-- Main image -->
+          <img
+            src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1632&q=80"
+            alt="Ammattimainen liiketapaaminen"
+            width="816"
+            height="544"
+            loading="eager"
+            decoding="async"
+            class="hero-img relative z-10 w-full rounded-3xl object-cover shadow-2xl ring-1 ring-gray-200"
+            style="aspect-ratio: 3/2;"
+          />
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Load Google Fonts for Sora + Lora -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800;900&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+
+<style>
+  /* ── Background dot grid ─────────────────────────── */
+  .hero-dots-bg {
+    background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.5;
+  }
+
+  /* ── Responsive typography ───────────────────────── */
+  .hero-h1 {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-lead {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+  }
+
+  /* ── Scroll-in entrance animations ──────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeRight {
+    from { opacity: 0; transform: translateX(36px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+
+  .hero-text {
+    animation: fadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-image {
+    animation: fadeRight 0.85s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-img {
+    animation: floatY 6s ease-in-out 1s infinite;
+  }
+
+  /* Staggered float cards */
+  .float-card:nth-of-type(1) {
+    animation: floatY 5s ease-in-out 0s infinite;
+  }
+  .float-card:nth-of-type(2) {
+    animation: floatY 7s ease-in-out 1.5s infinite;
+  }
+
+  /* ── Mobile overrides ────────────────────────────── */
+  @media (max-width: 640px) {
+    .hero-section {
+      text-align: center;
+    }
+
+    .hero-text {
+      align-items: center;
+    }
+
+    .hero-h1 br {
+      display: none;
+    }
+
+    .hero-image {
+      margin-top: 2rem;
+    }
+
+    /* Push cards slightly so they don't overflow viewport */
+    .float-card:first-of-type {
+      left: 0;
+      top: 4px;
+    }
+
+    .float-card:last-of-type {
+      right: 0;
+      bottom: -12px;
+    }
+  }
+</style>
