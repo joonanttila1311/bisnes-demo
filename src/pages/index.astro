@@ -1,15 +1,11 @@
 ---
+import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 ---
 
-<html lang="fi">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Yritys Oy - Etusivu</title>
-	</head>
-	<body>
+<Layout title="Yritys Oy - Etusivu">
+	<main>
 		<Hero />
-	</body>
-</html>
+	</main>
+</Layout>
