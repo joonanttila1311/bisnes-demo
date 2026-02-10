@@ -1,24 +1,48 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
-import Services from '../components/Services.astro'; // UUSI
-import Footer from '../components/Footer.astro';     // UUSI
+import Services from '../components/Services.astro';
+import Pricing from '../components/Pricing.astro';
+import About from '../components/About.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
 
-// Tässä voit vaihtaa koko sivuston teeman yhdellä sanalla!
-const CURRENT_THEME = 'remontti'; // Kokeile vaihtaa 'kahvila' tai 'default'
+// 1. TUO TÄMÄ:
+import { BUSINESS_CONFIG, type Theme } from '../information/config';
+
+// 2. VALITSE TEEMA:
+const SITE_THEME = 'remontti' as Theme; 
+
+// 3. MÄÄRITTELE NÄMÄ (Tämä puuttui todennäköisesti):
+const biz = BUSINESS_CONFIG[SITE_THEME];
+const companyFull = `${biz.name} ${biz.legalName}`.trim();
+
+// ── NAVIGAATIO LOGIIKKA ──
+type NavLink = { name: string; href: string };
+
+let navLinks: NavLink[] = [
+  { name: 'Etusivu', href: '#' },
+  { name: 'Palvelut', href: '#services' },
+  { name: SITE_THEME === 'kahvila' ? 'Menu' : 'Hinnasto', href: '#hinnasto' },
+  { name: SITE_THEME === 'kahvila' ? 'Tarina' : 'Meistä', href: '#about' },
+  { name: SITE_THEME === 'kahvila' ? 'Löydä meidät' : 'Ota yhteyttä', href: '#contact' }
+];
+
+const heroTitle = SITE_THEME === 'kahvila' ? 'Tuoretta kahvia & tunnelmaa' : undefined;
 ---
 
-<Layout title="Bisnes Demo">
+<Layout title={`${companyFull} - Etusivu`} navLinks={navLinks} preset={SITE_THEME}>
   <main>
-    <Hero preset={CURRENT_THEME} />
+    <Hero preset={SITE_THEME} title={heroTitle} />
     
-    <Services preset={CURRENT_THEME} />
-    
+    <Services preset={SITE_THEME} />
+
+    <Pricing preset={SITE_THEME} />
+
+    <About preset={SITE_THEME} />
+
+    <Contact preset={SITE_THEME} />
   </main>
 
-  <Footer 
-    companyName="Esimerkki Oy" 
-    email="info@esimerkki.fi" 
-    phone="040 123 4567" 
-  />
+  <Footer preset={SITE_THEME} companyName={companyFull} />
 </Layout>

@@ -2,316 +2,125 @@
 /**
  * Footer.astro
  * ─────────────────────────────────────────────────────────────
- * Dark, refined footer — slate-900 background, three columns,
- * dynamic copyright year, and contact props.
- *
- * Props:
- *   companyName? – string   (default: "Yritys Oy")
- *   email?       – string   (default: "info@yritys.fi")
- *   phone?       – string   (default: "+358 40 123 4567")
+ * Päivitetty versio: Hakee yhteystiedot src/config.ts -tiedostosta.
  */
+import { BUSINESS_CONFIG } from '../information/config';
+import { Facebook, Instagram, Linkedin, Mail, Phone } from 'lucide-react';
 
 interface Props {
+  preset?:      'default' | 'remontti' | 'kahvila';
   companyName?: string;
-  email?:       string;
-  phone?:       string;
 }
 
-const {
-  companyName = "Yritys Oy",
-  email       = "info@yritys.fi",
-  phone       = "+358 40 123 4567",
-} = Astro.props as Props;
+const { preset = 'default' } = Astro.props;
+
+// HAETAAN DATA CONFIGISTA
+const biz = BUSINESS_CONFIG[preset];
+const companyFull = `${biz.name} ${biz.legalName}`.trim();
 
 const year = new Date().getFullYear();
+const showCTA = preset !== 'kahvila';
 
 const quickLinks = [
   { label: "Etusivu",      href: "#" },
-  { label: "Palvelut",     href: "#palvelut" },
-  { label: "Hinnasto",     href: "#hinnasto" },
-  { label: "Meistä",       href: "#meista" },
-  { label: "Ota yhteyttä", href: "#contact" },
+  { label: "Palvelumme",   href: "#services" },
+  { label: preset === 'kahvila' ? "Menu" : "Hinnasto", href: "#hinnasto" }, 
+  { label: preset === 'kahvila' ? "Tarina" : "Meistä", href: "#about" },
+  { label: preset === 'kahvila' ? "Löydä meidät" : "Ota yhteyttä", href: "#contact" },
 ];
 
+// Määritellään somet configin mukaan (käytetään oletuslinkkejä jos configissa on tyhjää)
 const socialLinks = [
-  {
-    label: "Facebook",
-    href:  "https://facebook.com",
-    svg: `<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>`,
-  },
-  {
-    label: "Instagram",
-    href:  "https://instagram.com",
-    svg: `<rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>`,
-  },
-  {
-    label: "LinkedIn",
-    href:  "https://linkedin.com",
-    svg: `<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>`,
-  },
-  {
-    label: "X / Twitter",
-    href:  "https://x.com",
-    svg: `<path d="M4 4l16 16M4 20L20 4"/>`,  /* stylised X */
-  },
+  { label: "Facebook", href: biz.socials.facebook, Icon: Facebook },
+  { label: "Instagram", href: biz.socials.instagram, Icon: Instagram },
+  ...(biz.socials.linkedin ? [{ label: "LinkedIn", href: biz.socials.linkedin, Icon: Linkedin }] : []),
 ];
 ---
 
 <footer class="footer-root relative overflow-hidden bg-slate-900 text-white">
 
-  <!-- Subtle top-edge glow -->
-  <div
-    class="pointer-events-none absolute inset-x-0 top-0 h-px"
-    style="background: linear-gradient(90deg, transparent, #3b82f6 40%, #6366f1 60%, transparent);"
-    aria-hidden="true"
-  ></div>
+  <div class="pointer-events-none absolute inset-x-0 top-0 h-px" style="background: linear-gradient(90deg, transparent, var(--brand-color) 40%, rgba(255,255,255,0.1) 60%, transparent);"></div>
+  <div class="pointer-events-none absolute inset-0 footer-dots opacity-[0.04]"></div>
 
-  <!-- Background texture -->
-  <div class="pointer-events-none absolute inset-0 footer-dots opacity-[0.04]" aria-hidden="true"></div>
-
-  <!-- Faint radial bloom -->
-  <div
-    class="pointer-events-none absolute -bottom-32 left-1/2 h-125 w-125 -translate-x-1/2 rounded-full opacity-10"
-    style="background: radial-gradient(circle, #3b82f6 0%, transparent 65%);"
-    aria-hidden="true"
-  ></div>
-
-  <!-- ── Main grid ──────────────────────────────────────── -->
   <div class="relative mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
     <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-16">
 
-      <!-- ── Column 1 · Company info ──────────────────── -->
       <div>
-        <!-- Logomark + name -->
-        <a href="#" class="mb-6 inline-flex items-center gap-3 group" aria-label=`${companyName} — etusivu`>
-          <span
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 shadow-lg shadow-blue-900/50 transition-transform duration-300 group-hover:scale-105"
-            aria-hidden="true"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <rect x="2"  y="2"  width="6" height="6" rx="1.5" fill="white" opacity="0.9"/>
-              <rect x="10" y="2"  width="6" height="6" rx="1.5" fill="white" opacity="0.55"/>
-              <rect x="2"  y="10" width="6" height="6" rx="1.5" fill="white" opacity="0.55"/>
-              <rect x="10" y="10" width="6" height="6" rx="1.5" fill="white" opacity="0.9"/>
-            </svg>
+        <a href="#" class="mb-6 inline-flex items-center gap-3 group">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand shadow-lg shadow-brand/20 transition-transform duration-300 group-hover:scale-105">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="white"/></svg>
           </span>
-          <span
-            class="text-xl font-extrabold tracking-tight text-white"
-            style="font-family: 'Sora', 'Segoe UI', sans-serif;"
-          >
-            {companyName.replace(/\s?(Oy|Ab|Ltd|Inc)$/i, '')}<span class="text-blue-400">{companyName.match(/\s?(Oy|Ab|Ltd|Inc)$/i)?.[0] ?? ''}</span>
-          </span>
+          <span class="text-xl font-extrabold text-white" style="font-family: 'Sora', sans-serif;">{companyFull}</span>
         </a>
-
-        <p
-          class="mb-8 max-w-xs text-sm leading-relaxed text-slate-400"
-          style="font-family: 'Lora', Georgia, serif;"
-        >
-          Tarjoamme laadukkaita palveluja ja asiantuntemusta, joka kantaa. Rakennettu luottamukselle — toimitettu tuloksilla.
+        <p class="mb-8 max-w-xs text-sm text-slate-400" style="font-family: 'Lora', serif;">
+          {preset === 'kahvila' ? 'Intohimona laatu, raaka-aineina rakkaus.' : 'Asiantuntemusta, joka kantaa. Rakennettu luottamukselle.'}
         </p>
-
-        <!-- Contact details -->
-        <ul class="space-y-3" role="list">
-          <!-- Email -->
+        <ul class="space-y-3">
           <li>
-            <a
-              href={`mailto:${email}`}
-              class="footer-contact-link group inline-flex items-center gap-3 text-sm text-slate-300 transition-colors duration-200 hover:text-white"
-            >
-              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-slate-400 ring-1 ring-slate-700 transition-all duration-200 group-hover:bg-blue-600 group-hover:text-white group-hover:ring-blue-500">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect width="20" height="16" x="2" y="4" rx="2"/>
-                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-                </svg>
+            <a href={`mailto:${biz.email}`} class="group inline-flex items-center gap-3 text-sm text-slate-300 hover:text-white">
+              <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-800 text-slate-400 group-hover:bg-brand group-hover:text-white">
+                <Mail class="w-4 h-4" />
               </span>
-              {email}
+              {biz.email}
             </a>
           </li>
-          <!-- Phone -->
           <li>
-            <a
-              href={`tel:${phone.replace(/\s/g, '')}`}
-              class="footer-contact-link group inline-flex items-center gap-3 text-sm text-slate-300 transition-colors duration-200 hover:text-white"
-            >
-              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-slate-400 ring-1 ring-slate-700 transition-all duration-200 group-hover:bg-blue-600 group-hover:text-white group-hover:ring-blue-500">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
+            <a href={`tel:${biz.phone}`} class="group inline-flex items-center gap-3 text-sm text-slate-300 hover:text-white">
+              <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-800 text-slate-400 group-hover:bg-brand group-hover:text-white">
+                <Phone class="w-4 h-4" />
               </span>
-              {phone}
+              {biz.phone}
             </a>
           </li>
         </ul>
       </div>
 
-      <!-- ── Column 2 · Quick links ────────────────────── -->
       <div>
-        <h3
-          class="footer-heading mb-6 text-xs font-bold uppercase tracking-[0.15em] text-slate-500"
-          style="font-family: 'Sora', 'Segoe UI', sans-serif;"
-        >
-          Pikavalikko
-        </h3>
-        <nav aria-label="Alatunnisteen navigaatio">
-          <ul class="space-y-2.5" role="list">
-            {quickLinks.map(({ label, href }) => (
-              <li>
-                <a
-                  href={href}
-                  class="footer-nav-link group inline-flex items-center gap-2 text-sm text-slate-400 transition-all duration-200 hover:translate-x-1 hover:text-white"
-                  style="font-family: 'DM Sans', sans-serif;"
-                >
-                  <!-- Chevron accent -->
-                  <svg
-                    class="h-3.5 w-3.5 text-blue-500 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0"
-                    fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/>
-                  </svg>
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <!-- Divider & CTA -->
-        <div class="mt-8 border-t border-slate-800 pt-8">
-          <a
-            href="#contact"
-            class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/40 transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-blue-800/60 focus:outline-none focus:ring-4 focus:ring-blue-700"
-          >
-            Pyydä tarjous
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- ── Column 3 · Social media ───────────────────── -->
-      <div>
-        <h3
-          class="footer-heading mb-6 text-xs font-bold uppercase tracking-[0.15em] text-slate-500"
-          style="font-family: 'Sora', 'Segoe UI', sans-serif;"
-        >
-          Seuraa meitä
-        </h3>
-
-        <ul class="mb-8 flex flex-wrap gap-3" role="list">
-          {socialLinks.map(({ label, href, svg }) => (
+        <h3 class="mb-6 text-xs font-bold uppercase text-slate-500" style="font-family: 'Sora', sans-serif;">Pikavalikko</h3>
+        <ul class="space-y-2.5">
+          {quickLinks.map(({ label, href }) => (
             <li>
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                class="social-icon group flex h-11 w-11 items-center justify-center rounded-xl bg-slate-800 text-slate-400 ring-1 ring-slate-700 transition-all duration-200 hover:-translate-y-1 hover:bg-blue-600 hover:text-white hover:ring-blue-500 hover:shadow-lg hover:shadow-blue-900/50"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={svg}/>
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <!-- Newsletter mini-form -->
-        <div>
-          <p
-            class="mb-3 text-sm font-semibold text-slate-300"
-            style="font-family: 'Sora', 'Segoe UI', sans-serif;"
-          >
-            Tilaa uutiskirje
-          </p>
-          <p class="mb-4 text-xs text-slate-500" style="font-family: 'DM Sans', sans-serif;">
-            Ajankohtaiset uutiset ja tarjoukset suoraan sähköpostiisi.
-          </p>
-
-          <div class="flex overflow-hidden rounded-xl ring-1 ring-slate-700 focus-within:ring-blue-500 transition-all duration-200">
-            <label for="footer-email" class="sr-only">Sähköpostiosoitteesi</label>
-            <input
-              id="footer-email"
-              type="email"
-              placeholder="sinun@email.fi"
-              class="min-w-0 flex-1 bg-slate-800 px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none"
-              style="font-family: 'DM Sans', sans-serif;"
-            />
-            <button
-              type="submit"
-              class="flex shrink-0 items-center justify-center bg-blue-600 px-4 text-white transition-colors duration-200 hover:bg-blue-500 focus:outline-none"
-              aria-label="Tilaa"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /grid -->
-
-    <!-- ── Bottom bar ──────────────────────────────────── -->
-    <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-8 sm:flex-row">
-
-      <!-- Copyright -->
-      <p
-        class="text-xs text-slate-500"
-        style="font-family: 'DM Sans', sans-serif;"
-      >
-        © {year} <span class="text-slate-400 font-medium">{companyName}</span>. Kaikki oikeudet pidätetään.
-      </p>
-
-      <!-- Legal links -->
-      <nav aria-label="Juridinen navigaatio">
-        <ul class="flex flex-wrap gap-x-6 gap-y-1" role="list">
-          {["Tietosuoja", "Evästeet", "Käyttöehdot"].map((label) => (
-            <li>
-              <a
-                href="#"
-                class="text-xs text-slate-500 transition-colors duration-200 hover:text-slate-300"
-                style="font-family: 'DM Sans', sans-serif;"
-              >
+              <a href={href} class="group inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white">
+                <span class="opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0 text-brand">›</span>
                 {label}
               </a>
             </li>
           ))}
         </ul>
-      </nav>
+        {showCTA && (
+          <div class="mt-8 border-t border-slate-800 pt-8">
+            <a href="#contact" class="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-hover">
+              Pyydä tarjous →
+            </a>
+          </div>
+        )}
+      </div>
 
-      <!-- "Made with ♥" badge -->
-      <p class="text-xs text-slate-600" style="font-family: 'DM Sans', sans-serif;">
-        Tehty Suomessa <span class="text-red-500" aria-label="rakkaudella">♥</span>
-      </p>
+      <div>
+        <h3 class="mb-6 text-xs font-bold uppercase text-slate-500" style="font-family: 'Sora', sans-serif;">Seuraa meitä</h3>
+        <ul class="mb-8 flex gap-3">
+          {socialLinks.map(({ label, href, Icon }) => (
+            <li>
+              <a href={href} target="_blank" class="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-800 text-slate-400 hover:bg-brand hover:text-white">
+                <Icon class="w-4 h-4" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
 
     </div>
-  </div><!-- /container -->
 
+    <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-8 sm:flex-row text-xs text-slate-500">
+      <p>© {year} {companyFull}. Kaikki oikeudet pidätetään.</p>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-slate-300">Tietosuoja</a>
+        <a href="#" class="hover:text-slate-300">Käyttöehdot</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
-<!-- Fonts (shared family — only loaded once if already in head) -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Lora:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-
 <style>
-  /* Dot-grid texture */
-  .footer-dots {
-    background-image: radial-gradient(circle, #ffffff 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  /* Hover underline for contact links */
-  .footer-contact-link span {
-    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
-  }
-
-  /* Smooth nav link slide */
-  .footer-nav-link {
-    will-change: transform;
-  }
-
-  /* Social icon lift */
-  .social-icon {
-    will-change: transform;
-  }
+  .footer-dots { background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 24px 24px; }
 </style>

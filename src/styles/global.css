@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+/* 1. Määritellään CSS-muuttujat (Nämä toimivat aina) */
+:root {
+  --brand-color: #2563eb; /* Oletussininen */
+  --brand-hover: #1d4ed8;
+}
+
+[data-theme='remontti'] {
+  --brand-color: #f97316; /* Oranssi */
+  --brand-hover: #ea580c;
+}
+
+[data-theme='kahvila'] {
+  --brand-color: #d97706; /* Amber/Keltainen */
+  --brand-hover: #b45309;
+}
+
+/* 2. Kerrotaan Tailwindille, että 'brand' vastaa näitä muuttujia */
+@theme {
+  --color-brand: var(--brand-color);
+  --color-brand-hover: var(--brand-hover);
+}
+
+/* VS Coden "Unknown at rule" korjaus: 
+   Jos herja häiritsee, voit lisätä tämän tiedoston alkuun:
+   @custom-selector :--theme @theme; 
+   mutta se on vain kosmeettista. */

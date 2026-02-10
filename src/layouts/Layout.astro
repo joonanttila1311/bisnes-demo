@@ -2,34 +2,37 @@
 // src/layouts/Layout.astro
 import '../styles/global.css';
 import Navbar from '../components/Navbar';
+
+type NavLink = { name: string; href: string };
+
 interface Props {
-	title: string;
+  title: string;
+  navLinks: NavLink[];
+  preset?: 'default' | 'remontti' | 'kahvila';
 }
 
-const { title } = Astro.props;
+const { title, navLinks, preset = 'default' } = Astro.props;
 ---
-
 <!doctype html>
-<html lang="fi">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Demosivu" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body class="font-sans antialiased text-gray-900 bg-white">
-        <Navbar client:load />
-		<slot />
-	</body>
+<html lang="fi" data-theme={preset} class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Demosivu" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Laadukkaat palvelut ammattitaidolla." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="font-sans antialiased text-gray-900 bg-white">
+    <Navbar client:load navLinks={navLinks} />
+    <slot />
+  </body>
 </html>
-
 <style is:global>
-	/* Tämä varmistaa että Tailwind toimii oikein */
-	html, body {
-		height: 100%;
-		margin: 0;
-		padding: 0;
-	}
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
 </style>
