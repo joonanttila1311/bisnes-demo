@@ -1,147 +1,146 @@
 ---
-// Hero.astro - High-Converting Hero Section
-// Stack: Astro + Tailwind CSS + Lucide-React
-import { ArrowRight, ChevronRight, Play } from 'lucide-react';
+// Hero.astro - Master Template with Presets
+import { ArrowRight, ChevronRight, CheckCircle, Star } from 'lucide-react';
+
+// 1. MÄÄRITELLÄÄN ESI-ASETUKSET (PRESETS)
+// Tähän voit lisätä uusia "bisneksiä" kopioimalla rakenteen.
+const PRESETS = {
+  default: {
+    badgeText: "Asiantuntijapalvelut",
+    title: `Ratkaisut, jotka<br />
+      <span class="relative inline-block">
+        <span class="relative z-10 text-blue-600">kasvattavat</span>
+        <span class="absolute bottom-1 left-0 z-0 h-3 w-full rounded-sm opacity-20" style="background: #3b82f6;"></span>
+      </span>
+      &nbsp;liiketoimintaasi`,
+    subtitle: "Tarjoamme räätälöityjä palveluja, jotka auttavat yritystäsi menestymään.",
+    primaryBtnText: "Pyydä tarjous",
+    secondaryBtnText: "Lue lisää",
+    imageSrc: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1600&q=80",
+    showTrustSignals: true,
+    showFloatingCards: true
+  },
+  kahvila: {
+    badgeText: "Avoinna joka päivä 7-21",
+    title: "Kaupungin parhaat aamukahvit",
+    subtitle: "Tule nauttimaan tuoreista leivonnaisista, erikoiskahveista ja kiireettömästä tunnelmasta aivan keskustassa.",
+    primaryBtnText: "Katso Menu",
+    secondaryBtnText: "Löydä perille",
+    imageSrc: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1600&q=80",
+    showTrustSignals: false, // Kahvila ei tarvitse lukuja
+    showFloatingCards: false // Kahvila ei tarvitse "Success"-kortteja
+  },
+  remontti: {
+    badgeText: "Luotettava kumppani",
+    title: "Huoneistoremontit aikataulussa",
+    subtitle: "Avaimet käteen -remontit takuutyönä. Pyydä ilmainen arviokäynti jo tänään.",
+    primaryBtnText: "Pyydä arvio",
+    secondaryBtnText: "Katso referenssit",
+    imageSrc: "https://images.unsplash.com/photo-1581094794329-cd67b9355999?auto=format&fit=crop&w=1600&q=80",
+    showTrustSignals: true,
+    showFloatingCards: true
+  }
+};
+
+// 2. PROPSIT
+interface Props {
+  // UUSI PROP: Valitse mikä tyyppi on kyseessä (oletus 'default')
+  preset?: keyof typeof PRESETS;
+
+  // Nämä ovat valinnaisia, koska ne tulevat presetistä, 
+  // mutta ne voi ylikirjoittaa manuaalisesti.
+  title?: string;
+  subtitle?: string;
+  imageSrc?: string;
+  badgeText?: string;
+  primaryBtnText?: string;
+  secondaryBtnText?: string;
+  showTrustSignals?: boolean;
+  showFloatingCards?: boolean;
+}
+
+// 3. LOGIIKKA: Yhdistetään Preset + Manuaaliset muutokset
+const { preset = 'default', ...manualProps } = Astro.props;
+const activePreset = PRESETS[preset] || PRESETS.default;
+
+// Lopulliset arvot: Jos manuaalinen prop on annettu, se voittaa. Muuten käytetään presetiä.
+const title = manualProps.title ?? activePreset.title;
+const subtitle = manualProps.subtitle ?? activePreset.subtitle;
+const imageSrc = manualProps.imageSrc ?? activePreset.imageSrc;
+const badgeText = manualProps.badgeText ?? activePreset.badgeText;
+const primaryBtnText = manualProps.primaryBtnText ?? activePreset.primaryBtnText;
+const secondaryBtnText = manualProps.secondaryBtnText ?? activePreset.secondaryBtnText;
+const showTrustSignals = manualProps.showTrustSignals ?? activePreset.showTrustSignals;
+const showFloatingCards = manualProps.showFloatingCards ?? activePreset.showFloatingCards;
+
 ---
 
 <section class="hero-section relative overflow-hidden bg-white">
-
-  <!-- Subtle background texture & grid -->
+  
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-    <!-- Soft radial gradient bloom -->
-    <div
-      class="absolute -top-32 -left-32 h-150 w-150 rounded-full opacity-20"
-      style="background: radial-gradient(circle, #3b82f6 0%, transparent 70%);"
-    ></div>
-    <div
-      class="absolute -bottom-24 right-0 h-100 w-100 rounded-full opacity-10"
-      style="background: radial-gradient(circle, #6366f1 0%, transparent 70%);"
-    ></div>
-    <!-- Fine dot-grid overlay -->
+    <div class="absolute -top-32 -left-32 h-150 w-150 rounded-full opacity-20" style="background: radial-gradient(circle, #3b82f6 0%, transparent 70%);"></div>
+    <div class="absolute -bottom-24 right-0 h-100 w-100 rounded-full opacity-10" style="background: radial-gradient(circle, #6366f1 0%, transparent 70%);"></div>
     <div class="absolute inset-0 hero-dots-bg"></div>
   </div>
 
   <div class="mx-auto max-w-7xl px-6 py-20 sm:py-28 lg:px-8 lg:py-36">
-
     <div class="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-12">
 
-      <!-- ── LEFT: Text Column ───────────────────────────────── -->
       <div class="hero-text flex flex-col items-start">
-
-        <!-- Eyebrow badge -->
         <div class="mb-6 flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-1.5">
           <span class="inline-block h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
           <span class="text-sm font-semibold tracking-wide text-blue-700 uppercase">
-            Asiantuntijapalvelut
+            {badgeText}
           </span>
         </div>
 
-        <!-- H1 -->
-        <h1 class="hero-h1 mb-6 font-extrabold leading-tight tracking-tight text-gray-900"
-            style="font-family: 'Sora', 'Segoe UI', sans-serif;">
-          Ratkaisut, jotka<br />
-          <span class="relative inline-block">
-            <span class="relative z-10 text-blue-600">kasvattavat</span>
-            <span
-              class="absolute bottom-1 left-0 z-0 h-3 w-full rounded-sm opacity-20"
-              style="background: #3b82f6;"
-              aria-hidden="true"
-            ></span>
-          </span>
-          &nbsp;liiketoimintaasi
-        </h1>
+        <h1 
+          class="hero-h1 mb-6 font-extrabold leading-tight tracking-tight text-gray-900"
+          style="font-family: 'Sora', 'Segoe UI', sans-serif;"
+          set:html={title}
+        ></h1>
 
-        <!-- Lead paragraph -->
-        <p class="hero-lead mb-10 max-w-lg leading-relaxed text-gray-600"
-           style="font-family: 'Lora', Georgia, serif;">
-          Tarjoamme räätälöityjä asiantuntijapalveluja, jotka auttavat yritystäsi
-          menestymään kilpailluilla markkinoilla. Kokenut tiimimme on valmis
-          viemään liiketoimintasi seuraavalle tasolle.
+        <p class="hero-lead mb-10 max-w-lg leading-relaxed text-gray-600" style="font-family: 'Lora', serif;">
+          {subtitle}
         </p>
 
-        <!-- CTA Buttons -->
         <div class="flex flex-wrap items-center gap-4">
-
-          <!-- Primary CTA -->
-          <a
-            href="#contact"
-            class="cta-primary group inline-flex items-center gap-2.5 rounded-xl bg-blue-600 px-7 py-4 text-base font-bold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-300 focus:outline-none focus:ring-4 focus:ring-blue-300"
-          >
-            Pyydä tarjous
-            <ArrowRight
-              client:load
-              className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-            />
+          <a href="#contact" class="cta-primary group inline-flex items-center gap-2.5 rounded-xl bg-blue-600 px-7 py-4 text-base font-bold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700">
+            {primaryBtnText}
+            <ArrowRight class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
-
-          <!-- Secondary CTA -->
-          <a
-            href="#about"
-            class="cta-secondary group inline-flex items-center gap-2.5 rounded-xl border-2 border-gray-200 bg-white px-7 py-4 text-base font-bold text-gray-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-600 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-200"
-          >
-            Lue lisää
-            <ChevronRight
-              client:load
-              className="h-5 w-5 text-gray-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-blue-500"
-            />
+          <a href="#about" class="cta-secondary group inline-flex items-center gap-2.5 rounded-xl border-2 border-gray-200 bg-white px-7 py-4 text-base font-bold text-gray-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-600">
+            {secondaryBtnText}
+            <ChevronRight class="h-5 w-5 text-gray-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-blue-500" />
           </a>
-
         </div>
 
-        <!-- Social proof strip -->
-        <div class="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-gray-100 pt-8">
-          <div class="text-center">
-            <p class="text-2xl font-extrabold text-gray-900">+240</p>
-            <p class="text-sm text-gray-500">Tyytyväistä asiakasta</p>
-          </div>
-          <div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
-          <div class="text-center">
-            <p class="text-2xl font-extrabold text-gray-900">98%</p>
-            <p class="text-sm text-gray-500">Tyytyväisyysaste</p>
-          </div>
-          <div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
+        {showTrustSignals && (
+          <div class="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-gray-100 pt-8">
+            <div class="text-center"><p class="text-2xl font-extrabold text-gray-900">+240</p><p class="text-sm text-gray-500">Asiakasta</p></div>
+            <div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
+            <div class="text-center"><p class="text-2xl font-extrabold text-gray-900">98%</p><p class="text-sm text-gray-500">Tyytyväisyys</p></div>
+            <div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
           <div class="text-center">
             <p class="text-2xl font-extrabold text-gray-900">12v</p>
             <p class="text-sm text-gray-500">Kokemus alalta</p>
           </div>
         </div>
-
+        )}
       </div>
 
-      <!-- ── RIGHT: Image Column ─────────────────────────────── -->
       <div class="hero-image relative flex items-center justify-center lg:justify-end">
-
-        <!-- Decorative geometric accent -->
-        <div
-          class="absolute -right-6 -top-6 h-48 w-48 rounded-3xl border-4 border-blue-100 opacity-60 -z-10"
-          aria-hidden="true"
-        ></div>
-        <div
-          class="absolute -bottom-6 -left-6 h-32 w-32 rounded-full border-4 border-indigo-100 opacity-50 -z-10"
-          aria-hidden="true"
-        ></div>
-
-        <!-- Image wrapper -->
+        <div class="absolute -right-6 -top-6 h-48 w-48 rounded-3xl border-4 border-blue-100 opacity-60 -z-10"></div>
+        
         <div class="relative w-full max-w-lg">
-
-          <!-- Floating badge card -->
-          <div
-            class="float-card absolute -left-8 top-8 z-20 flex items-center gap-3 rounded-2xl bg-white px-5 py-3.5 shadow-xl ring-1 ring-gray-100 sm:-left-12"
-          >
-            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-100">
-              <!-- Checkmark SVG -->
-              <svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-              </svg>
-            </span>
-            <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Projekti valmis</p>
-              <p class="text-sm font-bold text-gray-900">2 viikkoa etuajassa</p>
-            </div>
-          </div>
-
-          <!-- Floating review card -->
-          <div
+          {showFloatingCards && (
+             <div class="float-card absolute -left-8 top-8 z-20 flex items-center gap-3 rounded-2xl bg-white px-5 py-3.5 shadow-xl ring-1 ring-gray-100 sm:-left-12">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-100">
+                  <CheckCircle class="h-5 w-5 text-green-600" />
+                </span>
+                <div><p class="text-xs font-semibold text-gray-500 uppercase">Projekti valmis</p><p class="text-sm font-bold text-gray-900">Etuajassa</p></div>
+             </div>
+             <div
             class="float-card absolute -bottom-6 -right-4 z-20 w-44 rounded-2xl bg-white px-4 py-3.5 shadow-xl ring-1 ring-gray-100 sm:-right-8"
           >
             <div class="mb-2 flex gap-0.5">
@@ -154,112 +153,34 @@ import { ArrowRight, ChevronRight, Play } from 'lucide-react';
             <p class="text-xs font-semibold leading-snug text-gray-700">"Erinomaista palvelua alusta loppuun!"</p>
             <p class="mt-1 text-xs text-gray-400">— Maria K., CEO</p>
           </div>
+          )}
 
-          <!-- Main image -->
-          <img
-            src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1632&q=80"
-            alt="Ammattimainen liiketapaaminen"
-            width="816"
-            height="544"
-            loading="eager"
-            decoding="async"
-            class="hero-img relative z-10 w-full rounded-3xl object-cover shadow-2xl ring-1 ring-gray-200"
-            style="aspect-ratio: 3/2;"
-          />
+          <img src={imageSrc} alt="Hero" class="hero-img relative z-10 w-full rounded-3xl object-cover shadow-2xl" style="aspect-ratio: 3/2;" />
         </div>
-
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- Load Google Fonts for Sora + Lora -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800;900&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-
 <style>
-  /* ── Background dot grid ─────────────────────────── */
-  .hero-dots-bg {
-    background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
-    background-size: 28px 28px;
-    opacity: 0.5;
-  }
-
-  /* ── Responsive typography ───────────────────────── */
-  .hero-h1 {
-    font-size: clamp(2.25rem, 5vw, 3.75rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-  }
-
-  .hero-lead {
-    font-size: clamp(1rem, 2vw, 1.125rem);
-  }
-
-  /* ── Scroll-in entrance animations ──────────────── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeRight {
-    from { opacity: 0; transform: translateX(36px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes floatY {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-8px); }
-  }
-
-  .hero-text {
-    animation: fadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .hero-image {
-    animation: fadeRight 0.85s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .hero-img {
-    animation: floatY 6s ease-in-out 1s infinite;
-  }
-
-  /* Staggered float cards */
-  .float-card:nth-of-type(1) {
-    animation: floatY 5s ease-in-out 0s infinite;
-  }
-  .float-card:nth-of-type(2) {
-    animation: floatY 7s ease-in-out 1.5s infinite;
-  }
-
-  /* ── Mobile overrides ────────────────────────────── */
+  /* Kopioi aiemmat tyylit tähän, ne pysyvät samana */
+  .hero-dots-bg { background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px); background-size: 28px 28px; opacity: 0.5; }
+  .hero-h1 { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: 1.1; letter-spacing: -0.02em; }
+  .hero-lead { font-size: clamp(1rem, 2vw, 1.125rem); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeRight { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .hero-text { animation: fadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .hero-image { animation: fadeRight 0.85s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .hero-img { animation: floatY 6s ease-in-out 1s infinite; }
+  .float-card { animation: floatY 5s ease-in-out infinite; }
   @media (max-width: 640px) {
-    .hero-section {
-      text-align: center;
-    }
-
-    .hero-text {
-      align-items: center;
-    }
-
-    .hero-h1 br {
-      display: none;
-    }
-
-    .hero-image {
-      margin-top: 2rem;
-    }
-
-    /* Push cards slightly so they don't overflow viewport */
-    .float-card:first-of-type {
-      left: 0;
-      top: 4px;
-    }
-
-    .float-card:last-of-type {
-      right: 0;
-      bottom: -12px;
-    }
+    .hero-section { text-align: center; }
+    .hero-text { align-items: center; }
+    .hero-image { margin-top: 2rem; }
   }
 </style>
