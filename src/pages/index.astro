@@ -1,17 +1,26 @@
 ---
-
+// Tämä on Server-Side koodialue (Javascript/Typescript)
+const pageTitle = "Mun Eka Bisnessivu";
 ---
 
-<html lang="en">
+<html lang="fi">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>{pageTitle}</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="bg-slate-100 font-sans text-gray-800">
+		<main class="max-w-3xl mx-auto mt-20 p-8 bg-white rounded-xl shadow-lg">
+			<h1 class="text-4xl font-bold text-blue-600 mb-4">Moi maailma!</h1>
+			<p class="text-lg mb-6">
+				Tämä on <span class="font-bold text-orange-500">Astro</span> + 
+				<span class="font-bold text-cyan-500">Tailwind</span>.
+			</p>
+			<button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+				Ota yhteyttä
+			</button>
+		</main>
 	</body>
 </html>
