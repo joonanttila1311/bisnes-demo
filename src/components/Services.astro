@@ -1,0 +1,389 @@
+---
+/**
+ * Services.astro
+ * ─────────────────────────────────────────────────────────────
+ * A flexible, preset-driven Services section for Astro + Tailwind.
+ *
+ * Props:
+ *   preset?   – 'remontti' | 'kahvila' | 'default'  (auto-fills content)
+ *   title?    – Section heading  (overrides preset)
+ *   subtitle? – Section subheading (overrides preset)
+ *   services? – Array of { title, description, icon } (overrides preset)
+ *
+ * Icon values are Lucide icon names (strings), rendered as SVG inline below.
+ * Add more icon cases in the getIconSVG helper as needed.
+ *
+ * Example usage:
+ *   <Services preset="remontti" />
+ *   <Services title="Palvelumme" subtitle="..." services={[...]} />
+ */
+
+// ── Types ─────────────────────────────────────────────────────
+interface Service {
+  title:       string;
+  description: string;
+  icon:        string;   // Lucide icon name, e.g. "Hammer", "Coffee"
+}
+
+interface Props {
+  preset?:   'remontti' | 'kahvila' | 'default';
+  title?:    string;
+  subtitle?: string;
+  services?: Service[];
+}
+
+// ── Presets ───────────────────────────────────────────────────
+const PRESETS: Record<string, { title: string; subtitle: string; services: Service[] }> = {
+
+  remontti: {
+    title:    "Remonttipalvelumme",
+    subtitle: "Laadukasta rakennusosaamista avainten luovutuksesta takuuhuoltoon — kaikki saman katon alta.",
+    services: [
+      {
+        title:       "Kylpyhuoneremontti",
+        description: "Täydellinen kylpyhuoneen uudistus vedeneristyksineen, laatoituksineen ja kalusteineen. Työ tehdään siististi ja aikataulussa.",
+        icon:        "ShowerHead",
+      },
+      {
+        title:       "Keittiöremontti",
+        description: "Keittiön suunnittelu, purkutyöt, uudet kalusteet, taso- ja lattiamateriaalit sekä kodinkoneiden asennus.",
+        icon:        "ChefHat",
+      },
+      {
+        title:       "Maalaus & Tasoitus",
+        description: "Ammattimainen seinien ja kattojen tasoitus sekä maalaus. Käytämme kestäviä materiaaleja ja takaamme siistin lopputuloksen.",
+        icon:        "PaintRoller",
+      },
+      {
+        title:       "Lattia- ja parkettityöt",
+        description: "Laminaatin, parketin, vinyyli- ja laattamateriaalien asennus sekä vanhojen lattioiden hionta ja lakkaus.",
+        icon:        "Layers",
+      },
+      {
+        title:       "LVI-työt",
+        description: "Putki-, viemäri- ja ilmastointiasennukset sertifioitujen ammattilaisten toimesta. Kerralla kuntoon.",
+        icon:        "Wrench",
+      },
+      {
+        title:       "Takuuhuolto",
+        description: "Kaikki työmme sisältävät kirjallisen takuun. Hoidamme mahdolliset jälkityöt nopeasti ja ilman ylimääräisiä kuluja.",
+        icon:        "ShieldCheck",
+      },
+    ],
+  },
+
+  kahvila: {
+    title:    "Kahvilapalvelumme",
+    subtitle: "Maistuvaa kahvia, tuoreita leivonnaisia ja lämmin tunnelma — tervetuloa omaan olohuoneeseesi.",
+    services: [
+      {
+        title:       "Erikoiskahvit",
+        description: "Espresso, cappuccino, flat white ja kausittain vaihtuvat erikoisuudet paahdettuna kotimaisella pienpaahtimon pavulla.",
+        icon:        "Coffee",
+      },
+      {
+        title:       "Tuoreet leivonnaiset",
+        description: "Croissantit, korvapuustit ja kakkuviipaleet paistetaan päivittäin paikan päällä. Myös gluteenittomia vaihtoehtoja.",
+        icon:        "Croissant",
+      },
+      {
+        title:       "Lounas",
+        description: "Vaihtuva lähiruokalounasvalikko arkipäivisin. Keitto, salaatti ja juoma — nopea ja maukas tauko päivään.",
+        icon:        "UtensilsCrossed",
+      },
+      {
+        title:       "Yksityistilaisuudet",
+        description: "Varaa koko kahvila syntymäpäiville, kokouksille tai muille juhlille. Räätälöity catering-paketti tarjolle.",
+        icon:        "PartyPopper",
+      },
+      {
+        title:       "Take Away",
+        description: "Nouda tilauksesi suoraan tiskiltä tai tilaa etukäteen puhelimitse. Ekologinen pakkaus mukaan.",
+        icon:        "ShoppingBag",
+      },
+      {
+        title:       "Lahjakortit",
+        description: "Ilahduta läheistäsi kahvilakokemuksella. Lahjakortit saatavilla kaikissa arvoissa — fyysinen tai digitaalinen.",
+        icon:        "Gift",
+      },
+    ],
+  },
+
+  default: {
+    title:    "Palvelumme",
+    subtitle: "Tarjoamme kattavan valikoiman asiantuntijapalveluja, jotka on räätälöity yrityksesi tarpeisiin.",
+    services: [
+      {
+        title:       "Konsultointi",
+        description: "Kokeneet asiantuntijamme analysoivat tilanteesi ja tarjoavat konkreettiset toimenpide-ehdotukset kasvuun.",
+        icon:        "BriefcaseBusiness",
+      },
+      {
+        title:       "Projektijohtaminen",
+        description: "Viemme projektisi maaliin aikataulussa ja budjetissa. Selkeä viestintä joka vaiheessa.",
+        icon:        "ClipboardList",
+      },
+      {
+        title:       "Digitaalinen markkinointi",
+        description: "Some, hakukoneoptimointi, sähköpostimarkkinointi ja analytiikka — kasvata näkyvyyttäsi tehokkaasti.",
+        icon:        "BarChart2",
+      },
+      {
+        title:       "Verkkosivut & Sovellukset",
+        description: "Suunnittelemme ja toteutamme modernit, konvertoivat verkkosivut ja mobiilisovellukset.",
+        icon:        "MonitorSmartphone",
+      },
+      {
+        title:       "Asiakaspalvelu",
+        description: "Nopea ja asiantunteva tuki arkipäivisin. Vastataan puhelimeen, sähköpostiin ja chatiin.",
+        icon:        "Headset",
+      },
+      {
+        title:       "Koulutus",
+        description: "Räätälöidyt koulutusohjelmat henkilöstöllesi. Lähikoulutus, verkkokurssi tai hybridimalli.",
+        icon:        "GraduationCap",
+      },
+    ],
+  },
+};
+
+// ── Resolve props against preset ──────────────────────────────
+const {
+  preset   = 'default',
+  title    = PRESETS[preset]?.title    ?? PRESETS.default.title,
+  subtitle = PRESETS[preset]?.subtitle ?? PRESETS.default.subtitle,
+  services = PRESETS[preset]?.services ?? PRESETS.default.services,
+} = Astro.props as Props;
+
+// ── Icon SVG helper ───────────────────────────────────────────
+// Returns a self-contained SVG string for the given Lucide icon name.
+// Stroke-only, 24×24, currentColor — matches Lucide's standard output.
+function getIconSVG(name: string): string {
+  const icons: Record<string, string> = {
+
+    // ── Remontti ──────────────────────────────────
+    ShowerHead: `<path d="M4 4a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/><path d="M9.5 8.5 14 13"/><path d="M6 10v4"/><path d="M10 6h4"/><circle cx="18" cy="18" r="3"/><path d="M14 14.01V14"/><path d="M14 18.01V18"/><path d="M18 14.01V14"/><path d="M22 14.01V14"/><path d="M22 18.01V18"/><path d="M18 22.01V22"/><path d="M14 22.01V22"/><path d="M22 22.01V22"/>`,
+
+    ChefHat: `<path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" x2="18" y1="17" y2="17"/>`,
+
+    PaintRoller: `<path d="M14 2H6a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h8"/><path d="M18 6h-4"/><rect width="4" height="6" x="16" y="4" rx="1"/><path d="M18 10v4"/><path d="M16 14h4"/><path d="M18 14v6"/><path d="M15 20h6"/>`,
+
+    Layers: `<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>`,
+
+    Wrench: `<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>`,
+
+    ShieldCheck: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/>`,
+
+    // ── Kahvila ───────────────────────────────────
+    Coffee: `<path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14"/><path d="M6 2v2"/><path d="M19 8a2 2 0 0 1 0 4"/>`,
+
+    Croissant: `<path d="m4.6 13.11 5.79-3.21C11.39 8.7 13 7.47 13 5.5a3.5 3.5 0 0 0-7 0 3.5 3.5 0 0 0-1.71 6.5Z"/><path d="m10.5 20.5-2.16-1.25a5 5 0 0 1-2.5-4.32V13l5.27-2.9 4.24 2.31V15a5 5 0 0 1-2.5 4.33Z"/><path d="M19.4 13.11a3.5 3.5 0 0 0-1.71-6.5 3.5 3.5 0 0 0-7 0c0 1.97 1.61 3.2 2.61 4.4l5.79 3.21Z"/><path d="m13.5 20.5 2.16-1.25a5 5 0 0 0 2.5-4.32V13l-5.28-2.9-4.23 2.31V15a5 5 0 0 0 2.5 4.33Z"/>`,
+
+    UtensilsCrossed: `<path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 21.8 6.4-6.3"/><path d="m19 5-7 7"/>`,
+
+    PartyPopper: `<path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12v0c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11v0c-.2 1.08-1.4 1.6-2.3.9L16 14"/><path d="m11 11 1.93 1.93c.8.8.8 2.12 0 2.92L9 19"/>`,
+
+    ShoppingBag: `<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>`,
+
+    Gift: `<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>`,
+
+    // ── Default ───────────────────────────────────
+    BriefcaseBusiness: `<path d="M12 12h.01"/><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect width="20" height="14" x="2" y="6" rx="2"/>`,
+
+    ClipboardList: `<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>`,
+
+    BarChart2: `<line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/>`,
+
+    MonitorSmartphone: `<path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"/><path d="M10 19v-3.96 3.15"/><path d="M7 19h5"/><rect width="6" height="10" x="16" y="12" rx="2"/>`,
+
+    Headset: `<path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/>`,
+
+    GraduationCap: `<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>`,
+  };
+
+  return icons[name] ?? `<circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/>`;
+}
+
+// ── Accent colour map per preset ──────────────────────────────
+const accentMap: Record<string, { bg: string; text: string; ring: string; badge: string }> = {
+  remontti: {
+    bg:    "bg-orange-50",
+    text:  "text-orange-600",
+    ring:  "hover:ring-orange-200",
+    badge: "bg-orange-100 text-orange-700",
+  },
+  kahvila: {
+    bg:    "bg-amber-50",
+    text:  "text-amber-600",
+    ring:  "hover:ring-amber-200",
+    badge: "bg-amber-100 text-amber-700",
+  },
+  default: {
+    bg:    "bg-blue-50",
+    text:  "text-blue-600",
+    ring:  "hover:ring-blue-200",
+    badge: "bg-blue-100 text-blue-700",
+  },
+};
+
+const accent = accentMap[preset] ?? accentMap.default;
+---
+
+<section class="services-section relative overflow-hidden bg-gray-50 py-24 sm:py-32">
+
+  <!-- Background decoration -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute inset-0 services-dots"></div>
+    <div
+      class="absolute -top-40 left-1/2 h-125 w-125 -translate-x-1/2 rounded-full opacity-10"
+      style="background: radial-gradient(circle, #3b82f6 0%, transparent 70%);"
+    ></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+    <!-- ── Section header ─────────────────────────── -->
+    <div class="section-header mx-auto mb-16 max-w-2xl text-center">
+
+      <!-- Eyebrow pill -->
+      <span class={`inline-block mb-4 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest ${accent.badge}`}>
+        Palvelumme
+      </span>
+
+      <h2
+        class="mb-5 font-extrabold leading-tight tracking-tight text-gray-900"
+        style="font-family: 'Sora', 'Segoe UI', sans-serif; font-size: clamp(1.875rem, 4vw, 3rem);"
+      >
+        {title}
+      </h2>
+
+      <p
+        class="text-lg leading-relaxed text-gray-500"
+        style="font-family: 'Lora', Georgia, serif;"
+      >
+        {subtitle}
+      </p>
+    </div>
+
+    <!-- ── Cards grid ─────────────────────────────── -->
+    <ul
+      class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      role="list"
+    >
+      {services.map((service, i) => (
+        <li
+          class={`service-card group relative flex flex-col rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200/70 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:ring-2 ${accent.ring}`}
+          style={`animation-delay: ${i * 80}ms`}
+        >
+          <!-- Number indicator -->
+          <span class="absolute right-6 top-6 text-4xl font-black text-gray-100 select-none leading-none group-hover:text-gray-200 transition-colors duration-300">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+
+          <!-- Icon ---------------------------------------- -->
+          <div class={`mb-6 inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${accent.bg} transition-transform duration-300 group-hover:scale-110`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="26"
+              height="26"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class={accent.text}
+              aria-hidden="true"
+              set:html={getIconSVG(service.icon)}
+            />
+          </div>
+
+          <!-- Text ----------------------------------------- -->
+          <h3
+            class="mb-3 text-lg font-bold text-gray-900"
+            style="font-family: 'Sora', 'Segoe UI', sans-serif;"
+          >
+            {service.title}
+          </h3>
+
+          <p
+            class="flex-1 text-sm leading-relaxed text-gray-500"
+            style="font-family: 'DM Sans', sans-serif;"
+          >
+            {service.description}
+          </p>
+
+          <!-- Bottom arrow link ─────────────────────────── -->
+          <div class="mt-6 flex items-center gap-1.5">
+            <span class={`text-sm font-semibold ${accent.text} opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0`}>
+              Lue lisää
+            </span>
+            <svg
+              class={`h-4 w-4 ${accent.text} opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0`}
+              style="transition-delay: 40ms;"
+              fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <!-- ── Bottom CTA strip ───────────────────────── -->
+    <div class="mt-16 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+      <p class="text-gray-500" style="font-family: 'DM Sans', sans-serif;">
+        Etkö löytänyt etsimääsi?
+      </p>
+      <a
+        href="#contact"
+        class={`inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-4 ${
+          preset === 'remontti' ? 'bg-orange-500 shadow-orange-200 hover:bg-orange-600 hover:shadow-orange-300 focus:ring-orange-200' :
+          preset === 'kahvila'  ? 'bg-amber-500 shadow-amber-200 hover:bg-amber-600 hover:shadow-amber-300 focus:ring-amber-200' :
+                                  'bg-blue-600 shadow-blue-200 hover:bg-blue-700 hover:shadow-blue-300 focus:ring-blue-200'
+        }`}
+      >
+        Kysy lisää
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Fonts (shared with Hero/Navbar) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Lora:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  /* Background dot grid */
+  .services-dots {
+    background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.45;
+  }
+
+  /* Scroll-reveal for section header */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  /* Staggered card reveal */
+  .service-card {
+    animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+    opacity: 0; /* starts hidden, filled by animation */
+  }
+
+  /* Prevent re-hiding after animation ends */
+  .service-card {
+    animation-fill-mode: forwards;
+  }
+</style>

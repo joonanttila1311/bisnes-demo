@@ -1,10 +1,24 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro'; // UUSI
+import Footer from '../components/Footer.astro';     // UUSI
+
+// Tässä voit vaihtaa koko sivuston teeman yhdellä sanalla!
+const CURRENT_THEME = 'remontti'; // Kokeile vaihtaa 'kahvila' tai 'default'
 ---
 
-<Layout title="Yritys Oy - Etusivu">
-	<main>
-		<Hero/>
-	</main>
+<Layout title="Bisnes Demo">
+  <main>
+    <Hero preset={CURRENT_THEME} />
+    
+    <Services preset={CURRENT_THEME} />
+    
+  </main>
+
+  <Footer 
+    companyName="Esimerkki Oy" 
+    email="info@esimerkki.fi" 
+    phone="040 123 4567" 
+  />
 </Layout>
