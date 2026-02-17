@@ -11,7 +11,7 @@ import Footer from '../components/Footer.astro';
 import { BUSINESS_CONFIG, type Theme } from '../information/config';
 
 // 2. VALITSE TEEMA:
-const SITE_THEME = 'remontti' as Theme; 
+const SITE_THEME = 'kahvila' as Theme; 
 
 // 3. MÄÄRITTELE NÄMÄ (Tämä puuttui todennäköisesti):
 const biz = BUSINESS_CONFIG[SITE_THEME];
@@ -23,7 +23,7 @@ type NavLink = { name: string; href: string };
 let navLinks: NavLink[] = [
   { name: 'Etusivu', href: '#' },
   { name: 'Palvelut', href: '#services' },
-  { name: SITE_THEME === 'kahvila' ? 'Menu' : 'Hinnasto', href: '#hinnasto' },
+  { name: SITE_THEME === 'kahvila' ? 'Menu' : 'Hinnasto', href: '#pricing' },
   { name: SITE_THEME === 'kahvila' ? 'Tarina' : 'Meistä', href: '#about' },
   { name: SITE_THEME === 'kahvila' ? 'Löydä meidät' : 'Ota yhteyttä', href: '#contact' }
 ];
