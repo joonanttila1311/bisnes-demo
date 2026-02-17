@@ -6,13 +6,12 @@ import Pricing from '../components/Pricing.astro';
 import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
-import ThemeSwitcher from '../components/ThemeSwitcher.astro';
 
 // 1. TUO TÄMÄ:
 import { BUSINESS_CONFIG, type Theme } from '../information/config';
 
 // 2. VALITSE TEEMA:
-const SITE_THEME = 'default' as Theme; 
+const SITE_THEME = 'kahvila' as Theme; 
 
 // 3. MÄÄRITTELE NÄMÄ (Tämä puuttui todennäköisesti):
 const biz = BUSINESS_CONFIG[SITE_THEME];
@@ -46,5 +45,4 @@ const heroTitle = SITE_THEME === 'kahvila' ? 'Tuoretta kahvia & tunnelmaa' : und
   </main>
 
   <Footer preset={SITE_THEME} companyName={companyFull} />
-  <ThemeSwitcher />
 </Layout>
