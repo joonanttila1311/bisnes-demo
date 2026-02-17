@@ -8,7 +8,7 @@ type NavLink = { name: string; href: string };
 interface Props {
   title: string;
   navLinks: NavLink[];
-  preset?: 'default' | 'remontti' | 'kahvila';
+  preset?: 'default' | 'remontti' | 'kahvila' | 'siivous';
 }
 
 const { title, navLinks, preset = 'default' } = Astro.props;
@@ -17,18 +17,25 @@ const { title, navLinks, preset = 'default' } = Astro.props;
 <html lang="fi" data-theme={preset} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Demosivu" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="Laadukkaat palvelut ammattitaidolla." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    
+    <meta name="description" content="Laadukkaat palvelut ammattitaidolla." />
+
     <title>{title}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,300;600&family=Lato:wght@400;700&family=Oswald:wght@400;600&family=Roboto:wght@400;500&family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
   </head>
-  <body class="font-sans antialiased text-gray-900 bg-white">
+  
+  <body class="font-body antialiased text-gray-900 bg-white pt-20">
     <Navbar client:load navLinks={navLinks} />
     <slot />
   </body>
 </html>
+
 <style is:global>
   html, body {
     height: 100%;

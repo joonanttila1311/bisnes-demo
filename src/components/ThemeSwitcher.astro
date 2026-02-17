@@ -1,0 +1,27 @@
+---
+---
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex gap-2 p-2 bg-white/90 backdrop-blur shadow-2xl rounded-full ring-1 ring-gray-200">
+  <a href="/" class="px-4 py-2 text-sm font-bold rounded-full transition-colors hover:bg-gray-100 data-[active]:bg-black data-[active]:text-white" id="link-default">
+    Default
+  </a>
+  <a href="/remontti" class="px-4 py-2 text-sm font-bold rounded-full transition-colors hover:bg-orange-100 text-orange-600 hover:text-orange-700" id="link-remontti">
+    Remontti
+  </a>
+  <a href="/kahvila" class="px-4 py-2 text-sm font-bold rounded-full transition-colors hover:bg-amber-100 text-amber-700 hover:text-amber-800" id="link-kahvila">
+    Kahvila
+  </a>
+  <a href="/siivous" class="px-4 py-2 text-sm font-bold rounded-full transition-colors hover:bg-sky-100 text-sky-600 hover:text-sky-700" id="link-siivous">
+    Siivous
+  </a>
+</div>
+
+<script>
+  // Tämä pieni skripti korostaa aktiivisen napin
+  const path = window.location.pathname.replace(/\//g, '');
+  const activeId = path === '' ? 'link-default' : `link-${path}`;
+  const el = document.getElementById(activeId);
+  if (el) {
+    el.classList.add('bg-gray-900', 'text-white');
+    el.classList.remove('text-orange-600', 'text-amber-700', 'text-sky-600');
+  }
+</script>

@@ -1,72 +1,17 @@
 ---
-/**
- * Services.astro
- * ─────────────────────────────────────────────────────────────
- * Päivitetty versio: Käyttää dynaamisia brand-värejä.
- */
-
-// ── Types ─────────────────────────────────────────────────────
-interface Service {
-  title:       string;
-  description: string;
-  icon:        string;
-}
+// Services.astro - Hakee palvelut suoraan configista
+import { CONTENT } from '../information/config';
 
 interface Props {
-  preset?:   'remontti' | 'kahvila' | 'default';
-  title?:    string;
-  subtitle?: string;
-  services?: Service[];
+  preset?: 'remontti' | 'kahvila' | 'default' | 'siivous';
 }
 
-// ── Presets (Vain sisältö) ─────────────────────────────────────
-const PRESETS: Record<string, { title: string; subtitle: string; services: Service[] }> = {
-  remontti: {
-    title:    "Remonttipalvelumme",
-    subtitle: "Laadukasta rakennusosaamista avainten luovutuksesta takuuhuoltoon.",
-    services: [
-      { title: "Kylpyhuoneremontti", description: "Täydellinen kylpyhuoneen uudistus vedeneristyksineen.", icon: "ShowerHead" },
-      { title: "Keittiöremontti", description: "Suunnittelu, purkutyöt ja asennus.", icon: "ChefHat" },
-      { title: "Maalaus & Tasoitus", description: "Ammattimainen seinien ja kattojen viimeistely.", icon: "PaintRoller" },
-      { title: "Lattia- ja parkettityöt", description: "Asennukset, hionnat ja lakkaukset.", icon: "Layers" },
-      { title: "LVI-työt", description: "Sertifioidut putki- ja ilmanvaihtoasennukset.", icon: "Wrench" },
-      { title: "Takuuhuolto", description: "Kirjallinen takuu jokaiselle kohteelle.", icon: "ShieldCheck" },
-    ],
-  },
-  kahvila: {
-    title:    "Kahvilapalvelumme",
-    subtitle: "Maistuvaa kahvia, tuoreita leivonnaisia ja lämmin tunnelma.",
-    services: [
-      { title: "Erikoiskahvit", description: "Paahdettuna kotimaisen pienpaahtimon pavulla.", icon: "Coffee" },
-      { title: "Tuoreet leivonnaiset", description: "Paistetaan päivittäin paikan päällä.", icon: "Croissant" },
-      { title: "Lounas", description: "Vaihtuva lähiruokalounas arkipäivisin.", icon: "UtensilsCrossed" },
-      { title: "Yksityistilaisuudet", description: "Varaa koko kahvila juhliisi.", icon: "PartyPopper" },
-      { title: "Take Away", description: "Nouda suoraan tiskiltä tai tilaa ennakkoon.", icon: "ShoppingBag" },
-      { title: "Lahjakortit", description: "Ilahduta läheistäsi kahvilakokemuksella.", icon: "Gift" },
-    ],
-  },
-  default: {
-    title:    "Palvelumme",
-    subtitle: "Kattava valikoima asiantuntijapalveluja tarpeisiisi.",
-    services: [
-      { title: "Konsultointi", description: "Analysoimme tilanteesi ja autamme kasvussa.", icon: "BriefcaseBusiness" },
-      { title: "Projektijohtaminen", description: "Viemme projektit maaliin aikataulussa.", icon: "ClipboardList" },
-      { title: "Markkinointi", description: "Kasvata näkyvyyttäsi tehokkaasti.", icon: "BarChart2" },
-      { title: "Verkkosivut", description: "Modernit ja konvertoivat ratkaisut.", icon: "MonitorSmartphone" },
-      { title: "Asiakaspalvelu", description: "Nopea ja asiantunteva tuki.", icon: "Headset" },
-      { title: "Koulutus", description: "Räätälöidyt ohjelmat henkilöstöllesi.", icon: "GraduationCap" },
-    ],
-  },
-};
+const { preset = 'default' } = Astro.props as Props;
 
-const {
-  preset   = 'default',
-  title    = PRESETS[preset]?.title    ?? PRESETS.default.title,
-  subtitle = PRESETS[preset]?.subtitle ?? PRESETS.default.subtitle,
-  services = PRESETS[preset]?.services ?? PRESETS.default.services,
-} = Astro.props as Props;
+// HAE DATAT
+const data = CONTENT[preset].services;
 
-// ── Icon SVG helper ───────────────────────────────────────────
+// Ikonifunktio pysyy täällä (koska se palauttaa SVG-koodia)
 function getIconSVG(name: string): string {
   const icons: Record<string, string> = {
     ShowerHead: `<path d="M4 4a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/><path d="M9.5 8.5 14 13"/><path d="M6 10v4"/><path d="M10 6h4"/><circle cx="18" cy="18" r="3"/>`,
@@ -87,6 +32,11 @@ function getIconSVG(name: string): string {
     MonitorSmartphone: `<path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"/><rect width="6" height="10" x="16" y="12" rx="2"/>`,
     Headset: `<path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/>`,
     GraduationCap: `<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>`,
+    Sparkles: `<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>`,
+    Box: `<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22v-9"/>`,
+    Sun: `<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>`,
+    SprayCan: `<path d="M3 3h.01"/><path d="M7 5h.01"/><path d="M11 7h.01"/><path d="M3 7h.01"/><path d="M7 9h.01"/><path d="M3 9h.01"/><path d="M14.8 7.5a2 2 0 0 1 3.5 1.4v2.2a3.8 3.8 0 0 0 .5 2 7 7 0 1 1-11 0"/><path d="m15 13 4 4"/><path d="m19 13-4 4"/>`,
+    HeartHandshake: `<path d="M19 14c1.49-1.28 3.6-2.34 4.58-3.26a6 6 0 0 0-11.5-4.58 6 6 0 0 0-11.5 4.58c1.32 1.24 4.8 3.73 4.96 4.64C5.6 16.33 6.67 19.34 8.5 22h5a5 5 0 0 0 5-5v-.5"/>`,
   };
   return icons[name] ?? `<circle cx="12" cy="12" r="9"/><path d="M12 8v4"/>`;
 }
@@ -105,30 +55,30 @@ function getIconSVG(name: string): string {
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
     <div class="section-header mx-auto mb-16 max-w-2xl text-center">
-      <span class="inline-block mb-4 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand">
+      <span class="inline-block mb-4 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand font-heading">
         Palvelumme
       </span>
 
-      <h2 class="mb-5 font-extrabold leading-tight tracking-tight text-gray-900" style="font-family: 'Sora', sans-serif; font-size: clamp(1.875rem, 4vw, 3rem);">
-        {title}
+      <h2 class="mb-5 font-extrabold leading-tight tracking-tight text-gray-900 font-heading" style="font-size: clamp(1.875rem, 4vw, 3rem);">
+        {data.title}
       </h2>
 
-      <p class="text-lg leading-relaxed text-gray-500" style="font-family: 'Lora', serif;">
-        {subtitle}
+      <p class="text-lg leading-relaxed text-gray-500 font-body">
+        {data.subtitle}
       </p>
     </div>
 
     <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list">
-      {services.map((service, i) => (
+      {data.items.map((service, i) => (
         <li
-          class="service-card group relative flex flex-col rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200/70 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:ring-2 hover:ring-brand/30"
+          class="service-card group relative flex flex-col rounded-(--radius-box) bg-white p-8 shadow-sm ring-1 ring-gray-200/70 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:ring-2 hover:ring-brand/30"
           style={`animation-delay: ${i * 80}ms`}
         >
-          <span class="absolute right-6 top-6 text-4xl font-black text-gray-100 select-none leading-none group-hover:text-brand/5 transition-colors duration-300">
+          <span class="absolute right-6 top-6 text-4xl font-black text-gray-100 select-none leading-none group-hover:text-brand/5 transition-colors duration-300 font-heading">
             {String(i + 1).padStart(2, '0')}
           </span>
 
-          <div class="mb-6 inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand/5 transition-transform duration-300 group-hover:scale-110">
+          <div class="mb-6 inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-(--radius-box) bg-brand/5 transition-transform duration-300 group-hover:scale-110">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="26"
@@ -145,16 +95,16 @@ function getIconSVG(name: string): string {
             />
           </div>
 
-          <h3 class="mb-3 text-lg font-bold text-gray-900" style="font-family: 'Sora', sans-serif;">
+          <h3 class="mb-3 text-lg font-bold text-gray-900 font-heading">
             {service.title}
           </h3>
 
-          <p class="flex-1 text-sm leading-relaxed text-gray-500" style="font-family: 'DM Sans', sans-serif;">
+          <p class="flex-1 text-sm leading-relaxed text-gray-500 font-body">
             {service.description}
           </p>
 
           <div class="mt-6 flex items-center gap-1.5">
-            <span class="text-sm font-semibold text-brand opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+            <span class="text-sm font-semibold text-brand opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 font-heading">
               Lue lisää
             </span>
             <svg class="h-4 w-4 text-brand opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" style="transition-delay: 40ms;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -166,8 +116,8 @@ function getIconSVG(name: string): string {
     </ul>
 
     <div class="mt-16 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-      <p class="text-gray-500" style="font-family: 'DM Sans', sans-serif;">Etkö löytänyt etsimääsi?</p>
-      <a href="#contact" class="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white shadow-md bg-brand shadow-brand/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-brand/30">
+      <p class="text-gray-500 font-body">Etkö löytänyt etsimääsi?</p>
+      <a href="#contact" class="inline-flex items-center gap-2 rounded-(--radius-btn) px-6 py-3 text-sm font-bold text-white shadow-md bg-brand shadow-brand/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-brand/30 font-heading">
         Kysy lisää
         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>

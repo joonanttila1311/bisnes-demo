@@ -1,28 +1,61 @@
 @import "tailwindcss";
 
-/* 1. Määritellään CSS-muuttujat (Nämä toimivat aina) */
 :root {
-  --brand-color: #2563eb; /* Oletussininen */
-  --brand-hover: #1d4ed8;
+  /* ── OLETUS (Default) ── */
+  /* Moderni, pyöristetty, teknologiahenkinen */
+  --brand-color: #2563eb;
+  --font-heading: 'Sora', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  
+  /* Pyöristykset */
+  --radius-box: 1.5rem;    /* 24px (Isot kortit, kuvat) */
+  --radius-btn: 0.75rem;   /* 12px (Napit) */
 }
 
+/* ── REMONTTI (Industrial) ── */
 [data-theme='remontti'] {
   --brand-color: #f97316; /* Oranssi */
-  --brand-hover: #ea580c;
+  
+  /* Jämäkkä, pysty otsikko, neutraali leipäteksti */
+  --font-heading: 'Oswald', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+
+  /* Terävät kulmat tuovat "rakennusalan" jämäkkyyttä */
+  --radius-box: 2px;       
+  --radius-btn: 2px;       
 }
 
+/* ── KAHVILA (Elegant & Cozy) ── */
 [data-theme='kahvila'] {
-  --brand-color: #d97706; /* Amber/Keltainen */
-  --brand-hover: #b45309;
+  --brand-color: #d97706; /* Amber/Kulta */
+
+  /* Tyylikäs serif-otsikko, pehmeä leipäteksti */
+  --font-heading: 'Fraunces', serif;
+  --font-body: 'Lato', sans-serif;
+
+  /* Erittäin pehmeät muodot */
+  --radius-box: 2rem;      /* 32px */
+  --radius-btn: 9999px;    /* Pillerinapit (täysin pyöreät päät) */
 }
 
-/* 2. Kerrotaan Tailwindille, että 'brand' vastaa näitä muuttujia */
+[data-theme='siivous'] {
+  --brand-color: #0ea5e9; /* Raikas taivaansininen (Sky-500) */
+  --brand-hover: #0284c7; /* Sky-600 */
+  
+  /* Puhdas, moderni fontti */
+  --font-heading: 'Sora', sans-serif; 
+  --font-body: 'DM Sans', sans-serif;
+
+  /* Hieman pyöristetyt kulmat, "friendly" look */
+  --radius-box: 1rem;
+  --radius-btn: 0.5rem;
+}
+
+/* Määritellään Tailwindille, että nämä muuttujat ovat käytössä */
 @theme {
   --color-brand: var(--brand-color);
-  --color-brand-hover: var(--brand-hover);
+  
+  /* Nyt voimme käyttää font-heading ja font-body luokkia */
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
-
-/* VS Coden "Unknown at rule" korjaus: 
-   Jos herja häiritsee, voit lisätä tämän tiedoston alkuun:
-   @custom-selector :--theme @theme; 
-   mutta se on vain kosmeettista. */

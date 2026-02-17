@@ -1,76 +1,23 @@
 ---
-/**
- * Contact.astro
- * ─────────────────────────────────────────────────────────────
- * Päivitetty versio: Hakee yhteystiedot src/config.ts -tiedostosta.
- */
-import { BUSINESS_CONFIG } from '../information/config';
-
-interface OpenDay  { days: string; hours: string }
-
-interface PresetData {
-  showForm:       boolean;
-  eyebrow:        string;
-  title:          string;
-  subtitle:       string;
-  formTitle:      string;
-  ctaLabel:       string;
-}
+// Contact.astro - Sisältö configista
+import { BUSINESS_CONFIG, CONTENT } from '../information/config';
 
 interface Props {
-  preset?:         'default' | 'remontti' | 'kahvila';
-  showForm?:      boolean;
-  title?:         string;
-  subtitle?:      string;
+  preset?: 'default' | 'remontti' | 'kahvila' | 'siivous';
 }
 
-// ── PRESETS (Vain tekstisisällöt) ──────────────────
-const PRESETS: Record<string, PresetData> = {
-  default: {
-    showForm:       true,
-    eyebrow:        "Ota yhteyttä",
-    title:          "Jutellaan siitä, miten voimme auttaa",
-    subtitle:       "Täytä lomake tai soita suoraan — vastaamme aina kahden arkipäivän sisällä.",
-    formTitle:      "Lähetä viesti",
-    ctaLabel:       "Lähetä viesti",
-  },
-  remontti: {
-    showForm:       true,
-    eyebrow:        "Pyydä tarjous",
-    title:          "Kerro projektistasi — tarjous on maksuton",
-    subtitle:       "Vastaamme jokaiseen yhteydenottoon kahden arkipäivän sisällä.",
-    formTitle:      "Pyydä maksuton tarjous",
-    ctaLabel:       "Lähetä tarjouspyyntö",
-  },
-  kahvila: {
-    showForm:       false,
-    eyebrow:        "Löydä meidät",
-    title:          "Tervetuloa nauttimaan",
-    subtitle:       "Olemme aivan keskustassa — helposti saavutettavissa julkisella liikenteellä ja pyörällä.",
-    formTitle:      "",
-    ctaLabel:       "Avaa Google Maps",
-  },
-};
+const { preset = 'default' } = Astro.props as Props;
 
-const { preset = 'default', ...overrides } = Astro.props as Props;
-
-// HAETAAN YHTEYSTIEDOT CONFIGISTA
+// HAE DATAT
 const biz = BUSINESS_CONFIG[preset];
+const data = CONTENT[preset].contact;
 
-const base = PRESETS[preset] ?? PRESETS.default;
-const data = { 
-  ...base, 
-  ...overrides 
-};
-
-// Ikonit
+// Ikonit pysyvät täällä
 const ICONS = {
   Mail:    `<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>`,
   Phone:   `<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>`,
   MapPin:  `<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>`,
-  Clock:   `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,
   Send:    `<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>`,
-  CheckCircle:`<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>`,
 };
 ---
 
@@ -85,19 +32,20 @@ const ICONS = {
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
     <div class="contact-header mx-auto mb-16 max-w-2xl text-center">
-      <span class="inline-block mb-5 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand ring-1 ring-brand/20">
+      <span class="inline-block mb-5 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand ring-1 ring-brand/20 font-heading">
         {data.eyebrow}
       </span>
-      <h2 class="mb-5 font-extrabold text-white" style="font-family:'Sora',sans-serif; font-size:clamp(1.875rem,4vw,3rem);">
+      <h2 class="mb-5 font-extrabold text-white font-heading" style="font-size:clamp(1.875rem,4vw,3rem);">
         {data.title}
       </h2>
-      <p class="text-lg text-slate-400" style="font-family:'Lora',serif;">{data.subtitle}</p>
+      <p class="text-lg text-slate-400 font-body">{data.subtitle}</p>
     </div>
 
     {data.showForm && (
       <div class="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-8">
-        <div class="form-card lg:col-span-3 rounded-2xl bg-white/5 p-8 ring-1 ring-white/10 backdrop-blur-sm">
-          <h3 class="mb-7 text-lg font-bold text-white" style="font-family:'Sora',sans-serif;">{data.formTitle}</h3>
+        <div class="form-card lg:col-span-3 rounded-(--radius-box) bg-white/5 p-8 ring-1 ring-white/10 backdrop-blur-sm">
+          <h3 class="mb-7 text-lg font-bold text-white font-heading">{data.formTitle}</h3>
+          
           <form class="space-y-5" onsubmit="event.preventDefault(); alert('Viesti lähetetty!');">
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div>
@@ -113,7 +61,7 @@ const ICONS = {
               <label for="cf-msg" class="form-label">Viesti *</label>
               <textarea id="cf-msg" rows="5" required class="form-input resize-none" placeholder={preset === 'remontti' ? "Kuvaile remonttiasi..." : "Miten voimme auttaa?"}></textarea>
             </div>
-            <button type="submit" class="submit-btn inline-flex w-full items-center justify-center gap-2.5 rounded-xl px-8 py-4 text-base font-bold text-white shadow-lg bg-brand shadow-brand/20 hover:bg-brand-hover transition-all focus:outline-none focus:ring-4 focus:ring-brand/30">
+            <button type="submit" class="submit-btn inline-flex w-full items-center justify-center gap-2.5 rounded-(--radius-btn) px-8 py-4 text-base font-bold text-white shadow-lg bg-brand shadow-brand/20 hover:bg-brand-hover transition-all focus:outline-none focus:ring-4 focus:ring-brand/30 font-heading">
               {data.ctaLabel}
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" set:html={ICONS.Send}/>
             </button>
@@ -121,31 +69,31 @@ const ICONS = {
         </div>
 
         <aside class="info-sidebar flex flex-col gap-6 lg:col-span-2">
-          <div class="rounded-2xl bg-white/5 p-7 ring-1 ring-white/10 backdrop-blur-sm">
-            <h3 class="mb-6 text-sm font-bold uppercase text-slate-400">Yhteystiedot</h3>
+          <div class="rounded-(--radius-box) bg-white/5 p-7 ring-1 ring-white/10 backdrop-blur-sm">
+            <h3 class="mb-6 text-sm font-bold uppercase text-slate-400 font-heading">Yhteystiedot</h3>
             <ul class="space-y-5">
               <li>
                 <a href={`mailto:${biz.email}`} class="group flex items-start gap-4">
-                  <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand ring-1 ring-brand/20 transition-all group-hover:bg-brand group-hover:text-white">
+                  <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-(--radius-btn) bg-brand/10 text-brand ring-1 ring-brand/20 transition-all group-hover:bg-brand group-hover:text-white">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" set:html={ICONS.Mail}/>
                   </span>
-                  <p class="text-sm font-medium text-slate-200 group-hover:text-white transition-colors mt-1.5">{biz.email}</p>
+                  <p class="text-sm font-medium text-slate-200 group-hover:text-white transition-colors mt-1.5 font-body">{biz.email}</p>
                 </a>
               </li>
               <li>
                 <a href={`tel:${biz.phone}`} class="group flex items-start gap-4">
-                  <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand ring-1 ring-brand/20 transition-all group-hover:bg-brand group-hover:text-white">
+                  <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-(--radius-btn) bg-brand/10 text-brand ring-1 ring-brand/20 transition-all group-hover:bg-brand group-hover:text-white">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" set:html={ICONS.Phone}/>
                   </span>
-                  <p class="text-sm font-medium text-slate-200 group-hover:text-white transition-colors mt-1.5">{biz.phone}</p>
+                  <p class="text-sm font-medium text-slate-200 group-hover:text-white transition-colors mt-1.5 font-body">{biz.phone}</p>
                 </a>
               </li>
               <li>
                 <div class="group flex items-start gap-4">
-                  <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand ring-1 ring-brand/20">
+                  <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-(--radius-btn) bg-brand/10 text-brand ring-1 ring-brand/20">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" set:html={ICONS.MapPin}/>
                   </span>
-                  <p class="text-sm font-medium text-slate-200 transition-colors mt-1.5">{biz.address}, {biz.zipAndCity}</p>
+                  <p class="text-sm font-medium text-slate-200 transition-colors mt-1.5 font-body">{biz.address}, {biz.zipAndCity}</p>
                 </div>
               </li>
             </ul>
@@ -156,23 +104,23 @@ const ICONS = {
 
     {!data.showForm && (
       <div class="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-8">
-        <div class="map-card lg:col-span-2 overflow-hidden rounded-2xl ring-1 ring-white/10 h-[400px]">
-  {biz.mapEmbedUrl ? (
-    <iframe 
-      src={biz.mapEmbedUrl} 
-      width="100%" 
-      height="100%" 
-      style="border:0; filter:grayscale(0.3) contrast(1.1);" 
-      allowfullscreen="" 
-      loading="lazy" 
-      class="w-full h-full"
-    ></iframe>
-  ) : (
-    <div class="flex h-full items-center justify-center bg-slate-800 text-slate-500">
-      <p>Karttalinkkiä ei ole asetettu config.ts-tiedostossa.</p>
-    </div>
-  )}
-</div>
+        <div class="map-card lg:col-span-2 overflow-hidden rounded-(--radius-box) ring-1 ring-white/10 min-h-100">
+          {biz.mapEmbedUrl ? (
+            <iframe 
+              src={biz.mapEmbedUrl} 
+              width="100%" 
+              height="100%" 
+              style="border:0; filter:grayscale(0.3) contrast(1.1);" 
+              allowfullscreen="" 
+              loading="lazy" 
+              class="w-full h-full"
+            ></iframe>
+          ) : (
+            <div class="flex h-full items-center justify-center bg-slate-800 text-slate-500">
+              <p>Karttalinkkiä ei ole asetettu config.ts-tiedostossa.</p>
+            </div>
+          )}
+        </div>
       </div>
     )}
 
@@ -181,11 +129,13 @@ const ICONS = {
 
 <style>
   .contact-dots { background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 24px 24px; }
-  .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: #94a3b8; }
+  .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: #94a3b8; font-family: var(--font-body); }
   .form-input {
-    display: block; width: 100%; padding: 0.75rem 1rem; border-radius: 0.75rem;
+    display: block; width: 100%; padding: 0.75rem 1rem; 
+    border-radius: var(--radius-btn);
     border: 1px solid #334155; background-color: rgba(15, 23, 42, 0.6);
     color: white; outline: none; transition: all 0.2s;
+    font-family: var(--font-body);
   }
   .form-input:focus { border-color: var(--brand-color); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }

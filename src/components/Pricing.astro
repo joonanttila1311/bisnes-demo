@@ -1,128 +1,25 @@
 ---
-/**
- * Pricing.astro
- * ─────────────────────────────────────────────────────────────
- * Päivitetty versio: Käyttää dynaamisia brand-värejä.
- */
-
-interface PricingFeature { text: string; included: boolean }
-
-interface PricingCard {
-  name:        string;
-  price:       string;
-  priceNote?:  string;
-  description: string;
-  features:    PricingFeature[];
-  popular:     boolean;
-  cta:         string;
-  ctaHref:     string;
-}
-
-interface PresetData {
-  eyebrow:  string;
-  title:    string;
-  subtitle: string;
-  cards:    PricingCard[];
-  note?:    string;
-}
+// Pricing.astro - Sisältö configista, tyylit dynaamisia
+import { CONTENT } from '../information/config';
 
 interface Props {
-  preset?:      'default' | 'remontti' | 'kahvila';
+  preset?:       'default' | 'remontti' | 'kahvila' | 'siivous';
   showSection?: boolean;
   title?:       string;
   subtitle?:    string;
 }
 
-// ── Presets (Vain sisältö, ei enää värejä tässä!) ─────────────────
-const PRESETS: Record<string, PresetData> = {
-  default: {
-    eyebrow:  "Hinnoittelu",
-    title:    "Selkeä hinnoittelu, ei yllätyksiä",
-    subtitle: "Valitse tarpeisiisi sopiva paketti.",
-    note:     "Hinnat sisältävät alv. 25,5 %.",
-    cards: [
-      {
-        name: "Startti", price: "alk. 290 €", priceNote: "/ kk",
-        description: "Pienille yrityksille.", popular: false,
-        cta: "Aloita", ctaHref: "#contact",
-        features: [{ text: "5 käyttäjää", included: true }, { text: "20 GB tila", included: true }, { text: "Tuki", included: true }, { text: "Analytiikka", included: false }]
-      },
-      {
-        name: "Kasvu", price: "alk. 690 €", priceNote: "/ kk",
-        description: "Kasvaville yrityksille.", popular: true,
-        cta: "Pyydä tarjous", ctaHref: "#contact",
-        features: [{ text: "25 käyttäjää", included: true }, { text: "100 GB tila", included: true }, { text: "24/7 Tuki", included: true }, { text: "Analytiikka", included: true }]
-      },
-      {
-        name: "Yritys", price: "Räätälöity", priceNote: "kysy lisää",
-        description: "Suurille organisaatioille.", popular: false,
-        cta: "Ota yhteyttä", ctaHref: "#contact",
-        features: [{ text: "Rajaton", included: true }, { text: "SLA", included: true }, { text: "Asiakaspäällikkö", included: true }, { text: "Integraatiot", included: true }]
-      }
-    ]
-  },
-  remontti: {
-    eyebrow:  "Hinnasto",
-    title:    "Läpinäkyvät hinnat remontillesi",
-    subtitle: "Kiinteät pakettihinnat helpottavat budjetointia.",
-    note:     "Hinnat ovat suuntaa-antavia. Alv. 25,5 % lisätään.",
-    cards: [
-      {
-        name: "Pikkuremontti", price: "alk. 499 €", priceNote: "+ materiaalit",
-        description: "Maalaus ja pintatyöt.", popular: false,
-        cta: "Pyydä tarjous", ctaHref: "#contact",
-        features: [{ text: "Maalaustyöt", included: true }, { text: "Tapetointi", included: true }, { text: "Listotus", included: true }, { text: "Takuu", included: true }]
-      },
-      {
-        name: "Kylpyhuone", price: "alk. 4 900 €", priceNote: "+ materiaalit",
-        description: "Täydellinen märkätilaremontti.", popular: true,
-        cta: "Varaa kartoitus", ctaHref: "#contact",
-        features: [{ text: "Purku & pohjat", included: true }, { text: "Vedeneristys", included: true }, { text: "Kaakelointi", included: true }, { text: "Putkityöt", included: true }]
-      },
-      {
-        name: "Huoneisto", price: "alk. 12 000 €", priceNote: "avaimet käteen",
-        description: "Koko asunnon uudistus.", popular: false,
-        cta: "Pyydä tarjous", ctaHref: "#contact",
-        features: [{ text: "Kaikki pinnat", included: true }, { text: "Keittiö & kph", included: true }, { text: "Sähkötyöt", included: true }, { text: "Projektijohto", included: true }]
-      }
-    ]
-  },
-  kahvila: {
-    eyebrow:  "Menu",
-    title:    "Makuja jokaiseen hetkeen",
-    subtitle: "Valmistettu päivittäin tuoreista raaka-aineista.",
-    note:     "Hinnat sisältävät alv. 14 %.",
-    cards: [
-      {
-        name: "Aamiainen", price: "9,90 €", priceNote: "klo 11 asti",
-        description: "Terveellinen aloitus päivään.", popular: false,
-        cta: "Varaa pöytä", ctaHref: "#contact",
-        features: [{ text: "Mehu & kahvi", included: true }, { text: "Leivonnainen", included: true }, { text: "Jogurtti", included: true }, { text: "Lämmin lisäke", included: false }]
-      },
-      {
-        name: "Lounasbuffet", price: "14,50 €", priceNote: "arkisin",
-        description: "Kattava ja vaihtuva lounas.", popular: true,
-        cta: "Katso menu", ctaHref: "#services",
-        features: [{ text: "Päivän keitto", included: true }, { text: "Pääruokabuffet", included: true }, { text: "Salaattipöytä", included: true }, { text: "Jälkiruoka", included: true }]
-      },
-      {
-        name: "Brunch", price: "22,00 €", priceNote: "viikonloppuisin",
-        description: "Viikonlopun herkutteluhetki.", popular: false,
-        cta: "Varaa paikka", ctaHref: "#contact",
-        features: [{ text: "Koko valikoima", included: true }, { text: "Lämmin buffet", included: true }, { text: "Kuohuviini", included: true }, { text: "Lapset -50%", included: true }]
-      }
-    ]
-  }
-};
-
 const { preset = 'default', showSection = true, title, subtitle } = Astro.props as Props;
 if (!showSection) return;
 
-const data = PRESETS[preset] ?? PRESETS.default;
+// HAETAAN DATAT
+const data = CONTENT[preset].pricing;
+
+// Ylikirjoitetaan, jos manuaalisia propseja on annettu
 const heading = title ?? data.title;
 const subhead = subtitle ?? data.subtitle;
 
-// SVG ikonit
+// SVG ikonit (UI-elementtejä, joten pidetään täällä)
 const CHECK = `<path d="M20 6 9 17l-5-5"/>`;
 const CROSS = `<path d="M18 6 6 18"/><path d="m6 6 12 12"/>`;
 const STAR  = `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`;
@@ -140,22 +37,24 @@ const STAR  = `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 
 
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
     <div class="pricing-header mx-auto mb-16 max-w-2xl text-center">
-      <span class="inline-block mb-5 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand">
+      <span class="inline-block mb-5 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand font-heading">
         {data.eyebrow}
       </span>
-      <h2 class="mb-5 font-extrabold text-gray-900" style="font-family:'Sora',sans-serif; font-size:clamp(1.875rem,4vw,3rem);">
+      <h2 class="mb-5 font-extrabold text-gray-900 font-heading" style="font-size:clamp(1.875rem,4vw,3rem);">
         {heading}
       </h2>
-      <p class="text-lg text-gray-500" style="font-family:'Lora',serif;">{subhead}</p>
+      <p class="text-lg text-gray-500 font-body">{subhead}</p>
     </div>
 
     <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
       {data.cards.map((card) => (
-        <div class={`pricing-card relative flex flex-col rounded-2xl bg-white p-8 transition-all duration-300 ${card.popular ? 'ring-2 ring-brand shadow-2xl scale-[1.03] z-10' : 'ring-1 ring-gray-200 shadow-md hover:shadow-xl'}`}>
+        <div 
+          class={`pricing-card relative flex flex-col rounded-(--radius-box) bg-white p-8 transition-all duration-300 ${card.popular ? 'ring-2 ring-brand shadow-2xl scale-[1.03] z-10' : 'ring-1 ring-gray-200 shadow-md hover:shadow-xl'}`}
+        >
           
           {card.popular && (
             <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
-              <span class="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-bold bg-brand text-white shadow-lg">
+              <span class="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-bold bg-brand text-white shadow-lg font-heading">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" set:html={STAR}/>
                 SUOSITUIN
               </span>
@@ -163,13 +62,13 @@ const STAR  = `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 
           )}
 
           <div class="mb-6">
-            <h3 class="text-xl font-extrabold text-gray-900" style="font-family:'Sora',sans-serif;">{card.name}</h3>
-            <p class="text-sm text-gray-500">{card.description}</p>
+            <h3 class="text-xl font-extrabold text-gray-900 font-heading">{card.name}</h3>
+            <p class="text-sm text-gray-500 font-body">{card.description}</p>
           </div>
 
           <div class="mb-8 border-b border-gray-100 pb-8">
-            <span class="text-3xl font-black text-gray-900" style="font-family:'Sora',sans-serif;">{card.price}</span>
-            {card.priceNote && <p class="text-xs text-gray-400">{card.priceNote}</p>}
+            <span class="text-3xl font-black text-gray-900 font-heading">{card.price}</span>
+            {card.priceNote && <p class="text-xs text-gray-400 font-body">{card.priceNote}</p>}
           </div>
 
           <ul class="mb-8 flex-1 space-y-3">
@@ -178,30 +77,29 @@ const STAR  = `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 
                 <span class={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${included ? 'bg-brand/10' : 'bg-gray-100'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class={included ? 'text-brand' : 'text-gray-300'} set:html={included ? CHECK : CROSS} />
                 </span>
-                <span class={`text-sm ${included ? 'text-gray-700' : 'text-gray-400 line-through'}`}>{text}</span>
+                <span class={`text-sm font-body ${included ? 'text-gray-700' : 'text-gray-400 line-through'}`}>{text}</span>
               </li>
             ))}
           </ul>
 
-          <a href={card.ctaHref} class={`inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-bold transition-all ${card.popular ? 'bg-brand text-white hover:bg-brand-hover shadow-lg' : 'bg-white text-brand ring-1 ring-brand hover:bg-brand hover:text-white'}`}>
+          <a href={card.ctaHref} class={`inline-flex w-full items-center justify-center gap-2 rounded-(--radius-btn) px-6 py-3.5 text-sm font-bold transition-all font-heading ${card.popular ? 'bg-brand text-white hover:bg-brand-hover shadow-lg' : 'bg-white text-brand ring-1 ring-brand hover:bg-brand hover:text-white'}`}>
             {card.cta}
           </a>
         </div>
       ))}
     </div>
 
-    {/* Alapalkki räätälöityyn tarjoukseen */}
     <div class="mt-16 flex flex-col items-center gap-5 rounded-2xl p-8 bg-brand/5 ring-1 ring-brand/10 sm:flex-row">
       <div class="flex-1">
-        <p class="font-bold text-gray-900" style="font-family:'Sora',sans-serif;">Tarvitsetko jotain muuta?</p>
-        <p class="text-sm text-gray-500">Ota yhteyttä, niin suunnitellaan juuri teille sopiva kokonaisuus.</p>
+        <p class="font-bold text-gray-900 font-heading">Tarvitsetko jotain muuta?</p>
+        <p class="text-sm text-gray-500 font-body">Ota yhteyttä, niin suunnitellaan juuri teille sopiva kokonaisuus.</p>
       </div>
-      <a href="#contact" class="bg-brand text-white px-6 py-3 rounded-xl font-bold shadow-md hover:bg-brand-hover transition-all">
+      <a href="#contact" class="bg-brand text-white px-6 py-3 rounded-(--radius-btn) font-bold shadow-md hover:bg-brand-hover transition-all font-heading">
         Pyydä tarjous
       </a>
     </div>
 
-    {data.note && <p class="mt-10 text-center text-xs text-gray-400">* {data.note}</p>}
+    {data.note && <p class="mt-10 text-center text-xs text-gray-400 font-body">* {data.note}</p>}
   </div>
 </section>
 

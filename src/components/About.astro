@@ -1,109 +1,15 @@
 ---
-/**
- * About.astro
- * ─────────────────────────────────────────────────────────────
- * Päivitetty versio: Käyttää dynaamisia brand-värejä.
- */
-
-interface Stat   { value: string; label: string }
-interface Image  { src: string; alt: string }
+// About.astro - Sisältö configista
+import { CONTENT } from '../information/config';
 
 interface Props {
-  preset?:        'default' | 'kahvila' | 'remontti';
-  title?:         string;
-  eyebrow?:       string;
-  paragraphs?:    string[];
-  stats?:         Stat[];
-  founderName?:   string;
-  founderTitle?:  string;
-  image?:         Image;
+  preset?: 'default' | 'kahvila' | 'remontti' | 'siivous';
 }
 
-// ── Presets (Vain sisältö) ─────────────────────────────────────
-const PRESETS: Record<string, {
-  title:        string;
-  eyebrow:      string;
-  paragraphs:   string[];
-  stats:        Stat[];
-  founderName:  string;
-  founderTitle: string;
-  image:        Image;
-}> = {
+const { preset = 'default' } = Astro.props as Props;
 
-  default: {
-    title:   "Olemme intohimoisesti asiakkaidemme puolella",
-    eyebrow: "Meistä",
-    paragraphs: [
-      "Perustimme yrityksen yhdellä selkeällä tavoitteella: tarjota palvelua, josta asiakkaat kertovat eteenpäin.",
-      "Tiimimme koostuu kokeneiden ammattilaisten joukosta, joilla on yhteensä yli 50 vuoden kokemus alalta.",
-      "Uskomme pitkiin asiakassuhteisiin. Emme myy ratkaisua ja katoa — olemme rinnallasi vielä vuosienkin jälkeen.",
-    ],
-    stats: [
-      { value: "12+", label: "Vuotta kokemusta" },
-      { value: "240", label: "Tyytyväistä asiakasta" },
-      { value: "98%", label: "Suositteluaste" },
-    ],
-    founderName:  "Aleksi Mäkinen",
-    founderTitle: "Toimitusjohtaja & Perustaja",
-    image: {
-      src: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1470&q=80",
-      alt: "Yrityksen perustaja työssään",
-    },
-  },
-
-  kahvila: {
-    title:   "Rakkaus kahviin alkoi pienestä paahtimosta",
-    eyebrow: "Tarina",
-    paragraphs: [
-      "Kaikki alkoi 2015, kun omistajamme Laura palasi Napolin-matkalta täynnä inspiraatiota. Hän halusi tuoda italialaisen kahvikulttuurin suomalaiseen arkeen.",
-      "Käytämme vain lähialueen tuottajien raaka-aineita: luomumaito lähitilalta ja kahvipavut vastuullisilta pienpaahtimoilta.",
-      "Kahvilamme on enemmän kuin kahvila — se on olohuone, jossa naapurit kohtaavat ja ystävät viihtyvät.",
-    ],
-    stats: [
-      { value: "9",    label: "Vuotta auki" },
-      { value: "340",  label: "Kuppia päivässä" },
-      { value: "100%", label: "Lähiruokaa" },
-    ],
-    founderName:  "Laura Nieminen",
-    founderTitle: "Omistaja & Kahvilamesteri",
-    image: {
-      src: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1374&q=80",
-      alt: "Barista valmistamassa kahvia",
-    },
-  },
-
-  remontti: {
-    title:   "Luotettavuus rakentuu teoilla, ei puheilla",
-    eyebrow: "Meistä",
-    paragraphs: [
-      "Yli kahden vuosikymmenen ajan olemme remontoineet satoja koteja Suomessa. Perustajamme Jukka oppi salat käytännössä.",
-      "Jokainen työmaamme on siisti, jokainen aikataulu pidetään ja jokaisesta projektista annetaan kirjallinen takuu.",
-      "Asiakkaamme luottavat meihin koska me luotamme omaan työmme. Käytämme ainoastaan sertifioituja materiaaleja.",
-    ],
-    stats: [
-      { value: "22+", label: "Vuotta kokemusta" },
-      { value: "600", label: "Remonttia valmiina" },
-      { value: "5v",  label: "Kirjallinen takuu" },
-    ],
-    founderName:  "Jukka Korhonen",
-    founderTitle: "Perustaja & Vastaava mestari",
-    image: {
-      src: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1470&q=80",
-      alt: "Ammattilainen työssään",
-    },
-  },
-};
-
-const {
-  preset        = 'default',
-  title         = PRESETS[preset]?.title        ?? PRESETS.default.title,
-  eyebrow       = PRESETS[preset]?.eyebrow       ?? PRESETS.default.eyebrow,
-  paragraphs    = PRESETS[preset]?.paragraphs    ?? PRESETS.default.paragraphs,
-  stats         = PRESETS[preset]?.stats         ?? PRESETS.default.stats,
-  founderName   = PRESETS[preset]?.founderName   ?? PRESETS.default.founderName,
-  founderTitle  = PRESETS[preset]?.founderTitle  ?? PRESETS.default.founderTitle,
-  image         = PRESETS[preset]?.image         ?? PRESETS.default.image,
-} = Astro.props as Props;
+// HAE DATA
+const data = CONTENT[preset].about;
 ---
 
 <section id="about" class="about-section relative overflow-hidden bg-white py-24 sm:py-32">
@@ -121,66 +27,66 @@ const {
 
       <div class="about-text order-2 lg:order-1">
         <div class="mb-5 flex items-center gap-3">
-          <span class="rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand">
-            {eyebrow}
+          <span class="rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand font-heading">
+            {data.eyebrow}
           </span>
           <span class="hidden h-px w-12 bg-brand opacity-30 sm:block" aria-hidden="true"></span>
         </div>
 
-        <h2 class="about-h2 mb-6 font-extrabold text-gray-900" style="font-family: 'Sora', sans-serif; font-size: clamp(1.75rem, 3.5vw, 2.75rem);">
-          {title}
+        <h2 class="about-h2 mb-6 font-extrabold text-gray-900 font-heading" style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);">
+          {data.title}
         </h2>
 
         <div class="mb-8 space-y-4">
-          {paragraphs.map((p, i) => (
-            <p class={`leading-relaxed text-gray-600 ${i === 0 ? 'text-base font-medium' : 'text-sm'}`} style="font-family: 'Lora', serif;">
+          {data.paragraphs.map((p, i) => (
+            <p class={`leading-relaxed text-gray-600 font-body ${i === 0 ? 'text-base font-medium' : 'text-sm'}`}>
               {p}
             </p>
           ))}
         </div>
 
         <div class="mb-10 grid grid-cols-3 gap-4 border-y border-gray-100 py-8">
-          {stats.map(({ value, label }) => (
+          {data.stats.map(({ value, label }) => (
             <div class="text-center">
-              <p class="mb-1 text-2xl font-extrabold text-brand" style="font-family: 'Sora', sans-serif;">
+              <p class="mb-1 text-2xl font-extrabold text-brand font-heading">
                 {value}
               </p>
-              <p class="text-xs text-gray-400 font-medium">{label}</p>
+              <p class="text-xs text-gray-400 font-medium font-body">{label}</p>
             </div>
           ))}
         </div>
 
         <div class="flex items-center gap-4">
-          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-lg font-black text-white shadow-lg bg-brand shadow-brand/20" style="font-family: 'Sora', sans-serif;">
-            {founderName.split(' ').map((n) => n[0]).join('').slice(0, 2)}
+          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-(--radius-box) text-lg font-black text-white shadow-lg bg-brand shadow-brand/20 font-heading">
+            {data.founder.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
           </div>
           <div>
-            <p class="text-lg font-bold text-gray-900 leading-tight" style="font-family: 'Sora', sans-serif;">{founderName}</p>
-            <p class="text-sm text-gray-400">{founderTitle}</p>
+            <p class="text-lg font-bold text-gray-900 leading-tight font-heading">{data.founder.name}</p>
+            <p class="text-sm text-gray-400 font-body">{data.founder.title}</p>
           </div>
           <div class="hidden sm:flex items-center gap-4 pl-4 border-l border-gray-200">
-            <p class="text-xs italic text-gray-400 max-w-40 leading-relaxed" style="font-family: 'Lora', serif;">
-              "Laatu ei maksa — huono laatu maksaa."
-            </p>
-          </div>
+          <p class="text-xs italic text-gray-400 max-w-40 leading-relaxed font-body">
+          "{data.quote}" 
+         </p>
+        </div>
         </div>
       </div>
 
       <div class="about-image order-1 flex justify-center lg:order-2 lg:justify-end">
         <div class="relative w-full max-w-md">
-          <div class="absolute -inset-3 rounded-3xl bg-brand/5 -z-10" style="transform: rotate(2.5deg);" aria-hidden="true"></div>
+          <div class="absolute -inset-3 rounded-(--radius-box) bg-brand/5 -z-10" style="transform: rotate(2.5deg);" aria-hidden="true"></div>
 
-          <img src={image.src} alt={image.alt} class="about-img relative z-10 w-full rounded-2xl object-cover shadow-2xl ring-1 ring-gray-200" style="aspect-ratio: 4/5;" />
+          <img src={data.image} alt={data.founder.name} class="about-img relative z-10 w-full rounded-(--radius-box) object-cover shadow-2xl ring-1 ring-gray-200" style="aspect-ratio: 4/5;" />
 
-          <div class="float-badge absolute -bottom-5 -left-5 z-20 flex items-center gap-3 rounded-2xl bg-white px-5 py-4 shadow-xl ring-1 ring-gray-100">
-            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white bg-brand shadow-md shadow-brand/20">
+          <div class="float-badge absolute -bottom-5 -left-5 z-20 flex items-center gap-3 rounded-(--radius-box) bg-white px-5 py-4 shadow-xl ring-1 ring-gray-100">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-(--radius-btn) text-white bg-brand shadow-md shadow-brand/20">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
             </span>
             <div>
-              <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">
+              <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 font-heading">
                 {preset === 'kahvila' ? 'Avattu' : 'Toiminnassa'}
               </p>
-              <p class="text-sm font-extrabold text-gray-900" style="font-family: 'Sora', sans-serif;">
+              <p class="text-sm font-extrabold text-gray-900 font-heading">
                 {preset === 'kahvila' ? 'vuodesta 2015' : preset === 'remontti' ? 'vuodesta 2002' : 'vuodesta 2012'}
               </p>
             </div>

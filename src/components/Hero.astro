@@ -1,74 +1,26 @@
 ---
-// Hero.astro - Master Template with Dynamic Brand Colors & Config Integration
-import { ArrowRight, ChevronRight, CheckCircle, Star } from 'lucide-react';
-import { BUSINESS_CONFIG } from '../information/config'; // TUODAAN CONFIG
+// Hero.astro - Nyt täysin puhdas ja hakee sisällön configista
+import { ArrowRight, ChevronRight, CheckCircle } from 'lucide-react';
+// TUODAAN MYÖS "CONTENT"
+import { BUSINESS_CONFIG, CONTENT } from '../information/config'; 
 
 interface Props {
-  preset?: 'default' | 'remontti' | 'kahvila';
+  preset?: 'default' | 'remontti' | 'kahvila' | 'siivous';
+  // Manuaaliset ylikirjoitukset ovat yhä mahdollisia, jos niitä joskus tarvitaan
   title?: string;
-  subtitle?: string;
-  imageSrc?: string;
-  badgeText?: string;
-  primaryBtnText?: string;
-  secondaryBtnText?: string;
-  showTrustSignals?: boolean;
-  showFloatingCards?: boolean;
 }
 
 const { preset = 'default', ...manualProps } = Astro.props;
 
-// 1. HAETAAN DATAT CONFIG-TIEDOSTOSTA
+// 1. HAETAAN LIIKETOIMINTATIEDOT (Kuva)
 const biz = BUSINESS_CONFIG[preset];
 
-// 2. MÄÄRITELLÄÄN TEKSTIPRESETIT (Pidetään ne tässä, jotta config ei paisu liikaa)
-const TEXT_PRESETS = {
-  default: {
-    badgeText: "Asiantuntijapalvelut",
-    title: `Ratkaisut, jotka<br />
-      <span class="relative inline-block">
-        <span class="relative z-10 text-brand">kasvattavat</span>
-        <span class="absolute bottom-1 left-0 z-0 h-3 w-full rounded-sm opacity-20" style="background: var(--brand-color);"></span>
-      </span>
-      &nbsp;liiketoimintaasi`,
-    subtitle: "Tarjoamme räätälöityjä palveluja, jotka auttavat yritystäsi menestymään kilpailluilla markkinoilla.",
-    primaryBtnText: "Pyydä tarjous",
-    secondaryBtnText: "Lue lisää",
-    showTrustSignals: true,
-    showFloatingCards: true
-  },
-  kahvila: {
-    badgeText: "Avoinna joka päivä",
-    title: "Kaupungin parhaat aamukahvit",
-    subtitle: "Tule nauttimaan tuoreista leivonnaisista, erikoiskahveista ja kiireettömästä tunnelmasta aivan keskustassa.",
-    primaryBtnText: "Löydä meidät",
-    secondaryBtnText: "Tarinamme",
-    showTrustSignals: false,
-    showFloatingCards: false
-  },
-  remontti: {
-    badgeText: "Luotettava kumppani",
-    title: "Huoneistoremontit aikataulussa",
-    subtitle: "Avaimet käteen -remontit takuutyönä. Pyydä ilmainen arviokäynti jo tänään.",
-    primaryBtnText: "Pyydä arvio",
-    secondaryBtnText: "Katso referenssit",
-    showTrustSignals: true,
-    showFloatingCards: true
-  }
-};
+// 2. HAETAAN TEKSTISISÄLTÖ UUDESTA CONTENT-OSIOSTA
+const content = CONTENT[preset].hero;
 
-const activeTexts = TEXT_PRESETS[preset] || TEXT_PRESETS.default;
-
-// 3. LOPULLISET ARVOT (Ensisijaisesti manualProps -> sitten Config/Texts)
-const title = manualProps.title ?? activeTexts.title;
-const subtitle = manualProps.subtitle ?? activeTexts.subtitle;
-const badgeText = manualProps.badgeText ?? activeTexts.badgeText;
-const primaryBtnText = manualProps.primaryBtnText ?? activeTexts.primaryBtnText;
-const secondaryBtnText = manualProps.secondaryBtnText ?? activeTexts.secondaryBtnText;
-const showTrustSignals = manualProps.showTrustSignals ?? activeTexts.showTrustSignals;
-const showFloatingCards = manualProps.showFloatingCards ?? activeTexts.showFloatingCards;
-
-// TÄRKEÄ: Kuva haetaan nyt ensisijaisesti config.ts:stä, jos manuaalista ei ole annettu
-const imageSrc = manualProps.imageSrc ?? biz.heroImage;
+// Määritellään lopulliset arvot (manuaalinen prop voittaa configin)
+const title = manualProps.title ?? content.title;
+const imageSrc = biz.heroImage; // Kuva haetaan yhä business-datasta
 ---
 
 <section class="hero-section relative overflow-hidden bg-white">
@@ -85,74 +37,62 @@ const imageSrc = manualProps.imageSrc ?? biz.heroImage;
       <div class="hero-text flex flex-col items-start">
         <div class="mb-6 flex items-center gap-2 rounded-full border border-brand/20 bg-brand/5 px-4 py-1.5">
           <span class="inline-block h-2 w-2 rounded-full bg-brand animate-pulse"></span>
-          <span class="text-sm font-semibold tracking-wide text-brand uppercase">
-            {badgeText}
+          <span class="text-sm font-semibold tracking-wide text-brand uppercase font-heading">
+            {content.badge}
           </span>
         </div>
 
         <h1 
-          class="hero-h1 mb-6 font-extrabold leading-tight tracking-tight text-gray-900"
-          style="font-family: 'Sora', sans-serif;"
+          class="hero-h1 mb-6 font-extrabold leading-tight tracking-tight text-gray-900 font-heading"
           set:html={title}
         ></h1>
 
-        <p class="hero-lead mb-10 max-w-lg leading-relaxed text-gray-600" style="font-family: 'Lora', serif;">
-          {subtitle}
+        <p class="hero-lead mb-10 max-w-lg leading-relaxed text-gray-600 font-body">
+          {content.subtitle}
         </p>
 
         <div class="flex flex-wrap items-center gap-4">
-          <a href="#contact" class="cta-primary group inline-flex items-center gap-2.5 rounded-xl bg-brand px-7 py-4 text-base font-bold text-white shadow-lg shadow-brand/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover">
-            {primaryBtnText}
-            <ArrowRight class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+          <a href="#contact" class="cta-primary group inline-flex items-center gap-2.5 rounded-(--radius-btn) bg-brand px-7 py-4 text-base font-bold text-white shadow-lg shadow-brand/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover font-heading">
+            {content.btnPrimary}
+            <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
           </a>
           
-          <a href="#about" class="cta-secondary group inline-flex items-center gap-2.5 rounded-xl border-2 border-gray-200 bg-white px-7 py-4 text-base font-bold text-gray-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/50 hover:text-brand">
-            {secondaryBtnText}
-            <ChevronRight class="h-5 w-5 text-gray-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-brand" />
+          <a href="#about" class="cta-secondary group inline-flex items-center gap-2.5 rounded-(--radius-btn) border-2 border-gray-200 bg-white px-7 py-4 text-base font-bold text-gray-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/50 hover:text-brand font-heading">
+            {content.btnSecondary}
+            <ChevronRight className="h-5 w-5 text-gray-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-brand" />
           </a>
         </div>
 
-        {showTrustSignals && (
+        {content.showTrust && (
           <div class="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-gray-100 pt-8">
-            <div class="text-center"><p class="text-2xl font-extrabold text-gray-900">+240</p><p class="text-sm text-gray-500">Asiakasta</p></div>
+            <div class="text-center"><p class="text-2xl font-extrabold text-gray-900 font-heading">+240</p><p class="text-sm text-gray-500 font-body">Asiakasta</p></div>
             <div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
-            <div class="text-center"><p class="text-2xl font-extrabold text-gray-900">98%</p><p class="text-sm text-gray-500">Tyytyväisyys</p></div>
+            <div class="text-center"><p class="text-2xl font-extrabold text-gray-900 font-heading">98%</p><p class="text-sm text-gray-500 font-body">Tyytyväisyys</p></div>
             <div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
             <div class="text-center">
-              <p class="text-2xl font-extrabold text-gray-900">12v</p>
-              <p class="text-sm text-gray-500">Kokemus alalta</p>
+              <p class="text-2xl font-extrabold text-gray-900 font-heading">12v</p>
+              <p class="text-sm text-gray-500 font-body">Kokemus alalta</p>
             </div>
           </div>
         )}
       </div>
 
       <div class="hero-image relative flex items-center justify-center lg:justify-end">
-        <div class="absolute -right-6 -top-6 h-48 w-48 rounded-3xl border-4 border-brand/10 opacity-60 -z-10"></div>
+        <div class="absolute -right-6 -top-6 h-48 w-48 rounded-(--radius-box) border-4 border-brand/10 opacity-60 -z-10"></div>
         
         <div class="relative w-full max-w-lg">
-          {showFloatingCards && (
+          {content.showCards && (
              <>
-               <div class="float-card absolute -left-8 top-8 z-20 flex items-center gap-3 rounded-2xl bg-white px-5 py-3.5 shadow-xl ring-1 ring-gray-100 sm:-left-12">
+               <div class="float-card absolute -left-8 top-8 z-20 flex items-center gap-3 rounded-(--radius-box) bg-white px-5 py-3.5 shadow-xl ring-1 ring-gray-100 sm:-left-12">
                   <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-100">
-                    <CheckCircle class="h-5 w-5 text-green-600" />
+                    <CheckCircle className="h-5 w-5 text-green-600" />
                   </span>
-                  <div><p class="text-xs font-semibold text-gray-500 uppercase">Projekti valmis</p><p class="text-sm font-bold text-gray-900">Etuajassa</p></div>
+                  <div><p class="text-xs font-semibold text-gray-500 uppercase font-heading">Projekti valmis</p><p class="text-sm font-bold text-gray-900 font-body">Etuajassa</p></div>
                </div>
-               <div class="float-card absolute -bottom-6 -right-4 z-20 w-44 rounded-2xl bg-white px-4 py-3.5 shadow-xl ring-1 ring-gray-100 sm:-right-8">
-                <div class="mb-2 flex gap-0.5">
-                  {[...Array(5)].map(() => (
-                    <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                  ))}
-                </div>
-                <p class="text-xs font-semibold leading-snug text-gray-700">"Erinomaista palvelua alusta loppuun!"</p>
-                <p class="mt-1 text-xs text-gray-400">— Maria K., CEO</p>
-              </div>
             </>
           )}
 
-          <img src={imageSrc} alt={biz.name} class="hero-img relative z-10 w-full rounded-3xl object-cover shadow-2xl" style="aspect-ratio: 3/2;" />
+          <img src={imageSrc} alt={biz.name} class="hero-img relative z-10 w-full rounded-(--radius-box) object-cover shadow-2xl" style="aspect-ratio: 3/2;" />
         </div>
       </div>
 

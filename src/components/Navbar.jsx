@@ -43,10 +43,11 @@ export default function Navbar({ navLinks }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=DM+Sans:wght@400;500&display=swap');
+        /* MUUTOS: Poistettu @import, koska fontit ladataan nyt Layout.astro:ssa */
 
-        .navbar-root { font-family: 'DM Sans', sans-serif; }
-        .navbar-logo  { font-family: 'Sora', sans-serif; }
+        /* MUUTOS: Käytetään dynaamisia fonttimuuttujia */
+        .navbar-root { font-family: var(--font-body); }
+        .navbar-logo { font-family: var(--font-heading); }
 
         /* Animoitu alleviivaus käyttää nyt dynaamista brand-väriä */
         .nav-link-line::after {
@@ -74,13 +75,15 @@ export default function Navbar({ navLinks }) {
           color: var(--brand-color);
           background: color-mix(in srgb, var(--brand-color) 8%, transparent);
           padding-left: 1.25rem;
-          border-radius: 0.75rem;
+          /* MUUTOS: rounded-0.75rem -> var(--radius-btn) */
+          border-radius: var(--radius-btn);
         }
         .mobile-link.is-active {
           color: var(--brand-color);
           background: color-mix(in srgb, var(--brand-color) 12%, transparent);
           padding-left: 1.25rem;
-          border-radius: 0.75rem;
+          /* MUUTOS: rounded-0.75rem -> var(--radius-btn) */
+          border-radius: var(--radius-btn);
           font-weight: 600;
         }
 
@@ -101,7 +104,8 @@ export default function Navbar({ navLinks }) {
           
           {/* LOGO */}
           <a href="#" className="navbar-logo flex items-center gap-2.5 group">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand shadow-md shadow-brand/20 transition-transform duration-300 group-hover:scale-105">
+            {/* MUUTOS: rounded-xl -> rounded-[var(--radius-btn)] */}
+            <span className="flex h-9 w-9 items-center justify-center rounded-(--radius-btn) bg-brand shadow-md shadow-brand/20 transition-transform duration-300 group-hover:scale-105">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <rect x="2"  y="2"  width="6" height="6" rx="1.5" fill="white" opacity="0.9"/>
                 <rect x="10" y="2"  width="6" height="6" rx="1.5" fill="white" opacity="0.6"/>
@@ -140,7 +144,8 @@ export default function Navbar({ navLinks }) {
                   key={link.label}
                   href={link.href}
                   onClick={() => handleNavClick(link.label)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-hover focus:outline-none focus:ring-4 focus:ring-brand/30"
+                  /* MUUTOS: rounded-xl -> rounded-[var(--radius-btn)] */
+                  className="inline-flex items-center gap-1.5 rounded-(--radius-btn) bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-hover focus:outline-none focus:ring-4 focus:ring-brand/30"
                 >
                   {link.label}
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -153,7 +158,8 @@ export default function Navbar({ navLinks }) {
           {/* MOBILE TOGGLE */}
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-gray-600 transition-colors hover:bg-gray-100 lg:hidden focus:ring-4 focus:ring-brand/10"
+            /* MUUTOS: rounded-xl -> rounded-[var(--radius-btn)] */
+            className="flex h-10 w-10 items-center justify-center rounded-(--radius-btn) border border-gray-200 bg-gray-50 text-gray-600 transition-colors hover:bg-gray-100 lg:hidden focus:ring-4 focus:ring-brand/10"
             onClick={() => setMenuOpen((o) => !o)}
           >
             <span className={`icon-wrap ${menuOpen ? "open" : ""}`}>
@@ -172,7 +178,8 @@ export default function Navbar({ navLinks }) {
                     <a
                       href={href}
                       onClick={() => handleNavClick(label)}
-                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand/20 transition-all hover:bg-brand-hover"
+                      /* MUUTOS: rounded-xl -> rounded-[var(--radius-btn)] */
+                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-(--radius-btn) bg-brand px-5 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand/20 transition-all hover:bg-brand-hover"
                     >
                       {label}
                       <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
