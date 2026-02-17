@@ -59,16 +59,16 @@ const socialLinks = [
 
         <ul class="space-y-3">
           <li>
-            <a href={`mailto:${biz.email}`} class="group inline-flex items-center gap-3 text-sm text-slate-300 hover:text-white font-body">
-              <span class="flex h-8 w-8 items-center justify-center rounded-(--radius-btn) bg-slate-800 text-slate-400 group-hover:bg-brand group-hover:text-white">
+            <a href={`mailto:${biz.email}`} class="group inline-flex items-center gap-3 text-sm text-slate-300 hover:text-white">
+              <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-800 text-slate-400 group-hover:bg-brand group-hover:text-white">
                 <Mail className="w-4 h-4" />
               </span>
               {biz.email}
             </a>
           </li>
           <li>
-            <a href={`tel:${biz.phone}`} class="group inline-flex items-center gap-3 text-sm text-slate-300 hover:text-white font-body">
-              <span class="flex h-8 w-8 items-center justify-center rounded-(--radius-btn) bg-slate-800 text-slate-400 group-hover:bg-brand group-hover:text-white">
+            <a href={`tel:${biz.phone}`} class="group inline-flex items-center gap-3 text-sm text-slate-300 hover:text-white">
+              <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-800 text-slate-400 group-hover:bg-brand group-hover:text-white">
                 <Phone className="w-4 h-4" />
               </span>
               {biz.phone}
@@ -103,7 +103,7 @@ const socialLinks = [
         <ul class="mb-8 flex gap-3">
           {socialLinks.map(({ label, href, Icon }) => (
             <li>
-              <a href={href} target="_blank" class="flex h-11 w-11 items-center justify-center rounded-(--radius-btn) bg-slate-800 text-slate-400 hover:bg-brand hover:text-white">
+              <a href={href} target="_blank" class="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-800 text-slate-400 hover:bg-brand hover:text-white">
                 <Icon className="w-4 h-4" />
               </a>
             </li>
