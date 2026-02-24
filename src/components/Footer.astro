@@ -27,6 +27,7 @@ const quickLinks = [
   { label: "Palvelumme",   href: "#services" },
   { label: preset === 'kahvila' ? "Menu" : "Hinnasto", href: "#pricing" }, 
   { label: preset === 'kahvila' ? "Tarina" : "Meistä", href: "#about" },
+  { label: preset === 'remontti' ? "Referenssit" : preset === 'siivous' ? "Työn jälki" : "Galleria", href: "#gallery" },
   { label: preset === 'kahvila' ? "Löydä meidät" : "Ota yhteyttä", href: "#contact" },
 ];
 
@@ -89,7 +90,8 @@ const socialLinks = [
             </li>
           ))}
         </ul>
-        {showCTA && (
+        
+         {showCTA && (
           <div class="mt-8 border-t border-slate-800 pt-8">
             <a href="#contact" class="inline-flex items-center gap-2 rounded-(--radius-btn) bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-hover font-heading">
               Pyydä tarjous →
@@ -97,6 +99,7 @@ const socialLinks = [
           </div>
         )}
       </div>
+      
 
       <div>
         <h3 class="mb-6 text-xs font-bold uppercase text-slate-500 font-heading">Seuraa meitä</h3>
@@ -116,8 +119,8 @@ const socialLinks = [
     <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-8 sm:flex-row text-xs text-slate-500 font-body">
       <p>© {year} {companyFull}. Kaikki oikeudet pidätetään.</p>
       <div class="flex gap-6">
-        <a href="#" class="hover:text-slate-300">Tietosuoja</a>
-        <a href="#" class="hover:text-slate-300">Käyttöehdot</a>
+        <a href="/tietosuoja" class="hover:text-slate-300">Tietosuoja</a>
+        <a href="/kayttoehdot" class="hover:text-slate-300">Käyttöehdot</a>
       </div>
     </div>
   </div>

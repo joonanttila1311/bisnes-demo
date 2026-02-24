@@ -6,12 +6,14 @@ import Pricing from '../components/Pricing.astro';
 import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import Gallery from '../components/Gallery.astro';
+import Faq from '../components/Faq.astro';
 
 // 1. TUO TÄMÄ:
-import { BUSINESS_CONFIG, type Theme } from '../information/config';
+import { BUSINESS_CONFIG, ACTIVE_THEME} from '../information/config';
 
 // 2. VALITSE TEEMA:
-const SITE_THEME = 'kahvila' as Theme; 
+const SITE_THEME = ACTIVE_THEME; 
 
 // 3. MÄÄRITTELE NÄMÄ (Tämä puuttui todennäköisesti):
 const biz = BUSINESS_CONFIG[SITE_THEME];
@@ -25,6 +27,7 @@ let navLinks: NavLink[] = [
   { name: 'Palvelut', href: '#services' },
   { name: SITE_THEME === 'kahvila' ? 'Menu' : 'Hinnasto', href: '#pricing' },
   { name: SITE_THEME === 'kahvila' ? 'Tarina' : 'Meistä', href: '#about' },
+  { name: SITE_THEME === 'remontti' ? 'Referenssit' : SITE_THEME === 'siivous' ? 'Työn jälki' : 'Galleria', href: '#gallery' },
   { name: SITE_THEME === 'kahvila' ? 'Löydä meidät' : 'Ota yhteyttä', href: '#contact' }
 ];
 
@@ -41,6 +44,10 @@ const heroTitle = SITE_THEME === 'kahvila' ? 'Tuoretta kahvia & tunnelmaa' : und
 
     <About preset={SITE_THEME} />
 
+    <Gallery preset={SITE_THEME} /> 
+
+    <Faq preset={SITE_THEME} /> 
+    
     <Contact preset={SITE_THEME} />
   </main>
 

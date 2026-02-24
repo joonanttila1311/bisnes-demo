@@ -2,6 +2,8 @@
 
 export type Theme = 'default' | 'remontti' | 'kahvila' | 'siivous';
 
+export const ACTIVE_THEME: Theme = 'siivous';
+
 // ── 1. YRITYKSEN PERUSTIEDOT (Yhteystiedot, Somat, Aukioloajat) ──
 interface BusinessData {
   name: string;
@@ -157,6 +159,18 @@ interface AboutContent {
   image: string;
 }
 
+interface GalleryImage {
+  src: string;
+  alt: string;
+}
+
+interface GalleryContent {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  images: GalleryImage[];
+}
+
 interface ContactContent {
   showForm: boolean;
   eyebrow: string;
@@ -166,6 +180,28 @@ interface ContactContent {
   ctaLabel: string;
 }
 
+interface PrivacySection {
+  heading: string;
+  paragraphs: string[];
+}
+
+interface PrivacyContent {
+  title: string;
+  lastUpdated: string;
+  sections: PrivacySection[];
+}
+
+interface TermsSection {
+  heading: string;
+  paragraphs: string[];
+}
+
+interface TermsContent {
+  title: string;
+  lastUpdated: string;
+  sections: TermsSection[];
+}
+
 interface ContentData {
   hero: HeroContent;
   services: ServicesContent;
@@ -173,10 +209,26 @@ interface ContentData {
   about: AboutContent;
   contact: ContactContent;
   footer: FooterContent;
+  gallery: GalleryContent;
+  faq: FAQContent;
+  privacy: PrivacyContent;
+  terms: TermsContent;
 }
 
 interface FooterContent {
   tagline: string;
+}
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface FAQContent {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  items: FAQItem[];
 }
 
 // --- Sisältö ---
@@ -246,6 +298,29 @@ export const CONTENT: Record<Theme, ContentData> = {
       quote: "Laatu ei maksa — huono laatu maksaa.",
       image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1470&q=80"
     },
+
+    gallery: {
+      eyebrow: "Galleria",
+      title: "Vilkaise kulissien taakse",
+      subtitle: "Ylpeydellä tehtyjä projekteja ja arkeamme.",
+      images: [
+        { src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80", alt: "Tiimipalaveri" },
+        { src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80", alt: "Toimiston arkea" },
+        { src: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80", alt: "Projekti valmiina" }
+      ]
+    },
+
+    faq: {
+      eyebrow: "UKK",
+      title: "Usein kysytyt kysymykset",
+      subtitle: "Löydä vastaukset mieltäsi askarruttaviin asioihin.",
+      items: [
+        { question: "Kuinka nopeasti pääsette aloittamaan?", answer: "Pyrimme aloittamaan uudet projektit aina 1-2 viikon sisällä sopimuksen allekirjoittamisesta." },
+        { question: "Sopivatko palvelunne pienyrityksille?", answer: "Kyllä, räätälöimme ratkaisut aina yrityksen koon ja budjetin mukaan." },
+        { question: "Miten laskutus tapahtuu?", answer: "Laskutamme tyypillisesti kerran kuukaudessa tai projektin virstanpylväiden mukaisesti. Maksuaika on 14 päivää." }
+      ]
+    },
+
     contact: {
       showForm: true,
       eyebrow: "Ota yhteyttä",
@@ -254,6 +329,77 @@ export const CONTENT: Record<Theme, ContentData> = {
       formTitle: "Lähetä viesti",
       ctaLabel: "Lähetä viesti"
     },
+
+    privacy: {
+      title: "Tietosuojaseloste",
+      lastUpdated: "24.2.2026",
+      sections: [
+        {
+          heading: "1. Mitä tietoja keräämme?",
+          paragraphs: [
+            "Keräämme ainoastaan tietoja, jotka jätät meille verkkosivustomme yhteydenottolomakkeen kautta.",
+            "Näihin kuuluvat tyypillisesti nimesi, sähköpostiosoitteesi, puhelinnumerosi ja viestisi sisältö."
+          ]
+        },
+        {
+          heading: "2. Mihin käytämme tietoja?",
+          paragraphs: [
+            "Käytämme antamiasi tietoja ainoastaan yhteydenottoosi vastaamiseen ja asiakassuhteen hoitamiseen.",
+            "Emme luovuta, myy tai jaa tietojasi kolmansille osapuolille ilman erillistä suostumustasi, ellei laki sitä erikseen vaadi."
+          ]
+        },
+        {
+          heading: "3. Tietojen säilytysaika",
+          paragraphs: [
+            "Säilytämme henkilötietoja vain niin kauan kuin se on tarpeellista yhteydenoton hoitamiseksi tai asiakassuhteen ylläpitämiseksi.",
+            "Säännöllisen asiakassuhteen päätyttyä tiedot poistetaan järjestelmistämme kohtuullisen ajan kuluessa."
+          ]
+        },
+        {
+          heading: "4. Sinun oikeutesi",
+          paragraphs: [
+            "Sinulla on oikeus tarkastaa sinusta tallennetut tiedot sekä vaatia niiden oikaisua tai poistamista kokonaan.",
+            "Voit tehdä pyynnön ottamalla meihin yhteyttä rekisterinpitäjän sähköpostiosoitteeseen."
+          ]
+        }
+      ]
+    },
+
+    terms: {
+      title: "Käyttöehdot",
+      lastUpdated: "24.2.2026",
+      sections: [
+        {
+          heading: "1. Yleistä",
+          paragraphs: [
+            "Näitä käyttöehtoja sovelletaan verkkosivustomme käyttöön. Käyttämällä sivustoa hyväksyt nämä ehdot kokonaisuudessaan.",
+            "Pidätämme oikeuden muuttaa näitä ehtoja, palveluitamme tai hintojamme milloin tahansa ilman ennakkoilmoitusta."
+          ]
+        },
+        {
+          heading: "2. Palvelut ja hinnoittelu",
+          paragraphs: [
+            "Sivustolla esitetyt hinnat, paketit ja palvelukuvaukset ovat suuntaa-antavia, ellei toisin ole erikseen mainittu.",
+            "Sitova sopimus palvelun tuottamisesta ja lopullisesta hinnasta syntyy vasta, kun olemme antaneet erillisen kirjallisen tarjouksen tai tilausvahvistuksen."
+          ]
+        },
+        {
+          heading: "3. Tekijänoikeudet",
+          paragraphs: [
+            "Kaikki sivustolla julkaistu materiaali (tekstit, kuvat, logot ja graafinen ilme) on yrityksemme tai sen yhteistyökumppaneiden omaisuutta.",
+            "Materiaalin luvaton kopiointi, jakaminen tai käyttö kaupallisiin tarkoituksiin on ehdottomasti kielletty tekijänoikeuslain nojalla."
+          ]
+        },
+        {
+          heading: "4. Vastuunrajoitus",
+          paragraphs: [
+            "Pyrimme pitämään sivuston tiedot ajantasaisina ja virheettöminä, mutta emme takaa tietojen täydellistä oikeellisuutta.",
+            "Emme vastaa mistään välittömistä tai välillisistä vahingoista, jotka voivat aiheutua sivuston käytöstä, käyttökatkoista tai sivustolla olevista virheistä."
+          ]
+        }
+      ]
+    },
+
     footer: {
       tagline: "Asiantuntemusta, joka kantaa. Rakennettu luottamukselle."
     }
@@ -324,6 +470,29 @@ export const CONTENT: Record<Theme, ContentData> = {
       quote: "Laatu ei maksa — huono laatu maksaa.",
       image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1470&q=80"
     },
+
+    gallery: {
+      eyebrow: "Referenssit",
+      title: "Työmme jälki puhuu puolestaan",
+      subtitle: "Tutustu hiljattain valmistuneisiin kohteisiimme.",
+      images: [
+        { src: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80", alt: "Uusittu keittiö" },
+        { src: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=800&q=80", alt: "Moderni kylpyhuone" },
+        { src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", alt: "Olohuoneen pintaremontti" }
+      ]
+    },
+
+    faq: {
+      eyebrow: "UKK",
+      title: "Mietityttääkö remontissa jokin?",
+      subtitle: "Kokosimme yleisimmät kysymykset ja vastaukset.",
+      items: [
+        { question: "Pitääkö minun muuttaa pois kotoa remontin ajaksi?", answer: "Se riippuu remontin laajuudesta. Pienissä pintaremonteissa voit asua kotona, mutta isojen kylpyhuone- tai huoneistoremonttien ajaksi suosittelemme sijaisasuntoa." },
+        { question: "Kuka hoitaa rakennusluvat ja ilmoitukset taloyhtiölle?", answer: "Me autamme kaikissa tarvittavissa paperitöissä ja teemme tarvittavat ilmoitukset taloyhtiön isännöitsijälle puolestasi." },
+        { question: "Mitä jos remontin aikana ilmenee yllätyksiä?", answer: "Kartoitamme kohteen huolella etukäteen. Jos purkuvaiheessa kuitenkin löytyy esimerkiksi kosteusvaurio, pysäytämme työt, informoimme sinua heti ja sovimme jatkotoimenpiteistä yhdessä." }
+      ]
+    },
+
     contact: {
       showForm: true,
       eyebrow: "Pyydä tarjous",
@@ -332,6 +501,77 @@ export const CONTENT: Record<Theme, ContentData> = {
       formTitle: "Pyydä maksuton tarjous",
       ctaLabel: "Lähetä tarjouspyyntö"
     },
+
+    privacy: {
+      title: "Tietosuojaseloste",
+      lastUpdated: "24.2.2026",
+      sections: [
+        {
+          heading: "1. Mitä tietoja keräämme?",
+          paragraphs: [
+            "Keräämme ainoastaan tietoja, jotka jätät meille verkkosivustomme yhteydenottolomakkeen kautta.",
+            "Näihin kuuluvat tyypillisesti nimesi, sähköpostiosoitteesi, puhelinnumerosi ja viestisi sisältö."
+          ]
+        },
+        {
+          heading: "2. Mihin käytämme tietoja?",
+          paragraphs: [
+            "Käytämme antamiasi tietoja ainoastaan yhteydenottoosi vastaamiseen ja asiakassuhteen hoitamiseen.",
+            "Emme luovuta, myy tai jaa tietojasi kolmansille osapuolille ilman erillistä suostumustasi, ellei laki sitä erikseen vaadi."
+          ]
+        },
+        {
+          heading: "3. Tietojen säilytysaika",
+          paragraphs: [
+            "Säilytämme henkilötietoja vain niin kauan kuin se on tarpeellista yhteydenoton hoitamiseksi tai asiakassuhteen ylläpitämiseksi.",
+            "Säännöllisen asiakassuhteen päätyttyä tiedot poistetaan järjestelmistämme kohtuullisen ajan kuluessa."
+          ]
+        },
+        {
+          heading: "4. Sinun oikeutesi",
+          paragraphs: [
+            "Sinulla on oikeus tarkastaa sinusta tallennetut tiedot sekä vaatia niiden oikaisua tai poistamista kokonaan.",
+            "Voit tehdä pyynnön ottamalla meihin yhteyttä rekisterinpitäjän sähköpostiosoitteeseen."
+          ]
+        }
+      ]
+    },
+
+    terms: {
+      title: "Käyttöehdot",
+      lastUpdated: "24.2.2026",
+      sections: [
+        {
+          heading: "1. Yleistä",
+          paragraphs: [
+            "Näitä käyttöehtoja sovelletaan verkkosivustomme käyttöön. Käyttämällä sivustoa hyväksyt nämä ehdot kokonaisuudessaan.",
+            "Pidätämme oikeuden muuttaa näitä ehtoja, palveluitamme tai hintojamme milloin tahansa ilman ennakkoilmoitusta."
+          ]
+        },
+        {
+          heading: "2. Palvelut ja hinnoittelu",
+          paragraphs: [
+            "Sivustolla esitetyt hinnat, paketit ja palvelukuvaukset ovat suuntaa-antavia, ellei toisin ole erikseen mainittu.",
+            "Sitova sopimus palvelun tuottamisesta ja lopullisesta hinnasta syntyy vasta, kun olemme antaneet erillisen kirjallisen tarjouksen tai tilausvahvistuksen."
+          ]
+        },
+        {
+          heading: "3. Tekijänoikeudet",
+          paragraphs: [
+            "Kaikki sivustolla julkaistu materiaali (tekstit, kuvat, logot ja graafinen ilme) on yrityksemme tai sen yhteistyökumppaneiden omaisuutta.",
+            "Materiaalin luvaton kopiointi, jakaminen tai käyttö kaupallisiin tarkoituksiin on ehdottomasti kielletty tekijänoikeuslain nojalla."
+          ]
+        },
+        {
+          heading: "4. Vastuunrajoitus",
+          paragraphs: [
+            "Pyrimme pitämään sivuston tiedot ajantasaisina ja virheettöminä, mutta emme takaa tietojen täydellistä oikeellisuutta.",
+            "Emme vastaa mistään välittömistä tai välillisistä vahingoista, jotka voivat aiheutua sivuston käytöstä, käyttökatkoista tai sivustolla olevista virheistä."
+          ]
+        }
+      ]
+    },
+
     footer: {
       tagline: "Rakennamme kestävää laatua ja pitkäaikaisia kumppanuuksia."
     }
@@ -402,6 +642,29 @@ export const CONTENT: Record<Theme, ContentData> = {
       quote: "Hyvä kahvi on kuin halaus kupissa.",
       image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1374&q=80"
     },
+
+    gallery: {
+      eyebrow: "Galleria",
+      title: "Tunnelmia ja makuja",
+      subtitle: "Pala arkeamme, tuoretta kahvia ja suussa sulavia leivonnaisia.",
+      images: [
+        { src: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=800&q=80", alt: "Latte art" },
+        { src: "https://images.unsplash.com/photo-1550617931-e17a7b70dce2?auto=format&fit=crop&w=800&q=80", alt: "Tuoreet croissantit" },
+        { src: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80", alt: "Viihtyisä nurkkaus" }
+      ]
+    },
+
+    faq: {
+      eyebrow: "Tietoa meistä",
+      title: "Usein kysyttyä",
+      subtitle: "Käytännön asioita vierailuasi varten.",
+      items: [
+        { question: "Saako teille tulla koiran kanssa?", answer: "Totta kai! Kiltit ja hihnassa olevat karvakaverit ovat lämpimästi tervetulleita. Meiltä löytyy aina vesikuppi ja rapsutuksia." },
+        { question: "Onko teillä gluteenittomia tai vegaanisia vaihtoehtoja?", answer: "Kyllä, vitriinistämme löytyy päivittäin sekä täysin vegaanisia että gluteenittomista raaka-aineista leivottuja herkkuja. (Huom. leivomme samoissa tiloissa, joten emme voi taata 100 % jauhottomuutta)." },
+        { question: "Voinko varata pöydän etukäteen?", answer: "Arkena otamme vastaan pöytävarauksia. Viikonloppuisin palvelemme walk-in -periaatteella, jotta kaikilla on mahdollisuus poiketa kahville." }
+      ]
+    },
+
     contact: {
       showForm: false,
       eyebrow: "Löydä meidät",
@@ -410,6 +673,77 @@ export const CONTENT: Record<Theme, ContentData> = {
       formTitle: "",
       ctaLabel: "Avaa Google Maps"
     },
+
+    privacy: {
+      title: "Tietosuojaseloste",
+      lastUpdated: "24.2.2026",
+      sections: [
+        {
+          heading: "1. Mitä tietoja keräämme?",
+          paragraphs: [
+            "Keräämme ainoastaan tietoja, jotka jätät meille verkkosivustomme yhteydenottolomakkeen kautta.",
+            "Näihin kuuluvat tyypillisesti nimesi, sähköpostiosoitteesi, puhelinnumerosi ja viestisi sisältö."
+          ]
+        },
+        {
+          heading: "2. Mihin käytämme tietoja?",
+          paragraphs: [
+            "Käytämme antamiasi tietoja ainoastaan yhteydenottoosi vastaamiseen ja asiakassuhteen hoitamiseen.",
+            "Emme luovuta, myy tai jaa tietojasi kolmansille osapuolille ilman erillistä suostumustasi, ellei laki sitä erikseen vaadi."
+          ]
+        },
+        {
+          heading: "3. Tietojen säilytysaika",
+          paragraphs: [
+            "Säilytämme henkilötietoja vain niin kauan kuin se on tarpeellista yhteydenoton hoitamiseksi tai asiakassuhteen ylläpitämiseksi.",
+            "Säännöllisen asiakassuhteen päätyttyä tiedot poistetaan järjestelmistämme kohtuullisen ajan kuluessa."
+          ]
+        },
+        {
+          heading: "4. Sinun oikeutesi",
+          paragraphs: [
+            "Sinulla on oikeus tarkastaa sinusta tallennetut tiedot sekä vaatia niiden oikaisua tai poistamista kokonaan.",
+            "Voit tehdä pyynnön ottamalla meihin yhteyttä rekisterinpitäjän sähköpostiosoitteeseen."
+          ]
+        }
+      ]
+    },
+
+    terms: {
+      title: "Käyttöehdot",
+      lastUpdated: "24.2.2026",
+      sections: [
+        {
+          heading: "1. Yleistä",
+          paragraphs: [
+            "Näitä käyttöehtoja sovelletaan verkkosivustomme käyttöön. Käyttämällä sivustoa hyväksyt nämä ehdot kokonaisuudessaan.",
+            "Pidätämme oikeuden muuttaa näitä ehtoja, palveluitamme tai hintojamme milloin tahansa ilman ennakkoilmoitusta."
+          ]
+        },
+        {
+          heading: "2. Palvelut ja hinnoittelu",
+          paragraphs: [
+            "Sivustolla esitetyt hinnat, paketit ja palvelukuvaukset ovat suuntaa-antavia, ellei toisin ole erikseen mainittu.",
+            "Sitova sopimus palvelun tuottamisesta ja lopullisesta hinnasta syntyy vasta, kun olemme antaneet erillisen kirjallisen tarjouksen tai tilausvahvistuksen."
+          ]
+        },
+        {
+          heading: "3. Tekijänoikeudet",
+          paragraphs: [
+            "Kaikki sivustolla julkaistu materiaali (tekstit, kuvat, logot ja graafinen ilme) on yrityksemme tai sen yhteistyökumppaneiden omaisuutta.",
+            "Materiaalin luvaton kopiointi, jakaminen tai käyttö kaupallisiin tarkoituksiin on ehdottomasti kielletty tekijänoikeuslain nojalla."
+          ]
+        },
+        {
+          heading: "4. Vastuunrajoitus",
+          paragraphs: [
+            "Pyrimme pitämään sivuston tiedot ajantasaisina ja virheettöminä, mutta emme takaa tietojen täydellistä oikeellisuutta.",
+            "Emme vastaa mistään välittömistä tai välillisistä vahingoista, jotka voivat aiheutua sivuston käytöstä, käyttökatkoista tai sivustolla olevista virheistä."
+          ]
+        }
+      ]
+    },
+
     footer: {
       tagline: "Intohimona laatu, raaka-aineina rakkaus."
     }
@@ -479,6 +813,29 @@ export const CONTENT: Record<Theme, ContentData> = {
     quote: "Sinun vapaa-aikasi on meille kunnia-asia.",
     image: "https://images.unsplash.com/photo-1527515545081-5db817172677?auto=format&fit=crop&w=1470&q=80"
   },
+
+  gallery: {
+      eyebrow: "Työn jälki",
+      title: "Puhdasta ja raikasta",
+      subtitle: "Katso, miltä näyttää koti, jossa olemme käyneet.",
+      images: [
+        { src: "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80", alt: "Puhdas olohuone" },
+        { src: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", alt: "Kiiltävä kylpyhuone" },
+        { src: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80", alt: "Tahrattomat keittiötasot" }
+      ]
+    },
+
+    faq: {
+      eyebrow: "UKK",
+      title: "Usein kysytyt kysymykset",
+      subtitle: "Kaikki mitä sinun tarvitsee tietää siivouspalvelustamme.",
+      items: [
+        { question: "Pitääkö minun olla kotona siivouksen aikana?", answer: "Ei tarvitse! Suurin osa asiakkaistamme on töissä siivouksen ajan. Voit luovuttaa meille avaimen, jota säilytämme turvallisesti nimettömänä." },
+        { question: "Tuotteko omat siivousvälineet mukana?", answer: "Kyllä, tuomme mukanamme kaikki tarvittavat ammattitason välineet ja ekologiset puhdistusaineet. Sinun ei tarvitse huolehtia mistään." },
+        { question: "Miten kotitalousvähennys toimii?", answer: "Saat kaikista siivoustyön kuluista 60 % verovähennyksen. Annamme sinulle selkeän kuitin, jonka avulla vähennyksen ilmoittaminen OmaVerossa on helppoa." }
+      ]
+    },
+
   contact: {
     showForm: true,
     eyebrow: "Ota yhteyttä",
@@ -487,6 +844,77 @@ export const CONTENT: Record<Theme, ContentData> = {
     formTitle: "Lähetä tarjouspyyntö",
     ctaLabel: "Lähetä viesti"
   },
+
+  privacy: {
+      title: "Tietosuojaseloste",
+      lastUpdated: "24.2.2026",
+      sections: [
+        {
+          heading: "1. Mitä tietoja keräämme?",
+          paragraphs: [
+            "Keräämme ainoastaan tietoja, jotka jätät meille verkkosivustomme yhteydenottolomakkeen kautta.",
+            "Näihin kuuluvat tyypillisesti nimesi, sähköpostiosoitteesi, puhelinnumerosi ja viestisi sisältö."
+          ]
+        },
+        {
+          heading: "2. Mihin käytämme tietoja?",
+          paragraphs: [
+            "Käytämme antamiasi tietoja ainoastaan yhteydenottoosi vastaamiseen ja asiakassuhteen hoitamiseen.",
+            "Emme luovuta, myy tai jaa tietojasi kolmansille osapuolille ilman erillistä suostumustasi, ellei laki sitä erikseen vaadi."
+          ]
+        },
+        {
+          heading: "3. Tietojen säilytysaika",
+          paragraphs: [
+            "Säilytämme henkilötietoja vain niin kauan kuin se on tarpeellista yhteydenoton hoitamiseksi tai asiakassuhteen ylläpitämiseksi.",
+            "Säännöllisen asiakassuhteen päätyttyä tiedot poistetaan järjestelmistämme kohtuullisen ajan kuluessa."
+          ]
+        },
+        {
+          heading: "4. Sinun oikeutesi",
+          paragraphs: [
+            "Sinulla on oikeus tarkastaa sinusta tallennetut tiedot sekä vaatia niiden oikaisua tai poistamista kokonaan.",
+            "Voit tehdä pyynnön ottamalla meihin yhteyttä rekisterinpitäjän sähköpostiosoitteeseen."
+          ]
+        }
+      ]
+    },
+
+    terms: {
+      title: "Käyttöehdot",
+      lastUpdated: "24.2.2026",
+      sections: [
+        {
+          heading: "1. Yleistä",
+          paragraphs: [
+            "Näitä käyttöehtoja sovelletaan verkkosivustomme käyttöön. Käyttämällä sivustoa hyväksyt nämä ehdot kokonaisuudessaan.",
+            "Pidätämme oikeuden muuttaa näitä ehtoja, palveluitamme tai hintojamme milloin tahansa ilman ennakkoilmoitusta."
+          ]
+        },
+        {
+          heading: "2. Palvelut ja hinnoittelu",
+          paragraphs: [
+            "Sivustolla esitetyt hinnat, paketit ja palvelukuvaukset ovat suuntaa-antavia, ellei toisin ole erikseen mainittu.",
+            "Sitova sopimus palvelun tuottamisesta ja lopullisesta hinnasta syntyy vasta, kun olemme antaneet erillisen kirjallisen tarjouksen tai tilausvahvistuksen."
+          ]
+        },
+        {
+          heading: "3. Tekijänoikeudet",
+          paragraphs: [
+            "Kaikki sivustolla julkaistu materiaali (tekstit, kuvat, logot ja graafinen ilme) on yrityksemme tai sen yhteistyökumppaneiden omaisuutta.",
+            "Materiaalin luvaton kopiointi, jakaminen tai käyttö kaupallisiin tarkoituksiin on ehdottomasti kielletty tekijänoikeuslain nojalla."
+          ]
+        },
+        {
+          heading: "4. Vastuunrajoitus",
+          paragraphs: [
+            "Pyrimme pitämään sivuston tiedot ajantasaisina ja virheettöminä, mutta emme takaa tietojen täydellistä oikeellisuutta.",
+            "Emme vastaa mistään välittömistä tai välillisistä vahingoista, jotka voivat aiheutua sivuston käytöstä, käyttökatkoista tai sivustolla olevista virheistä."
+          ]
+        }
+      ]
+    },
+
   footer: {
       tagline: "Puhdas koti on arjen ylellisyyttä, jonka ansaitset."
     }

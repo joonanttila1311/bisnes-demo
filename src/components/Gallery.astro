@@ -1,0 +1,60 @@
+---
+// src/components/Gallery.astro
+import { CONTENT } from '../information/config';
+
+interface Props {
+  preset?: 'default' | 'remontti' | 'kahvila' | 'siivous';
+}
+
+const { preset = 'default' } = Astro.props as Props;
+const data = CONTENT[preset].gallery;
+
+// Varmuuden vuoksi, jos dataa ei syystä tai toisesta ole
+if (!data || !data.images || data.images.length === 0) return null;
+---
+
+<section id="gallery" class="relative overflow-hidden bg-gray-50 py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    
+    <div class="mx-auto mb-16 max-w-2xl text-center">
+      <span class="inline-block mb-4 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand font-heading">
+        {data.eyebrow}
+      </span>
+      <h2 class="mb-5 font-extrabold text-gray-900 font-heading" style="font-size: clamp(1.875rem, 4vw, 3rem);">
+        {data.title}
+      </h2>
+      <p class="text-lg text-gray-500 font-body">
+        {data.subtitle}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {data.images.map((img, index) => (
+        <div 
+          class="group relative overflow-hidden rounded-(--radius-box) shadow-sm hover:shadow-xl transition-all duration-500 bg-white"
+          style={`aspect-ratio: 4/3; animation: fadeUp 0.6s ${index * 0.15}s both;`}
+        >
+          <img 
+            src={img.src} 
+            alt={img.alt} 
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 bg-linear-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+            <span class="text-white font-heading font-bold text-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+              {img.alt}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  @keyframes fadeUp { 
+    from { opacity: 0; transform: translateY(24px); } 
+    to { opacity: 1; transform: translateY(0); } 
+  }
+</style>

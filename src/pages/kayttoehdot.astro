@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+import { BUSINESS_CONFIG, CONTENT, ACTIVE_THEME } from '../information/config';
+
+// HAETAAN TEEMA PÄÄKYTKIMESTÄ
+const SITE_THEME = ACTIVE_THEME; 
+
+const biz = BUSINESS_CONFIG[SITE_THEME];
+const data = CONTENT[SITE_THEME].terms; // <--- Hakee terms-datan
+
+const navLinks = [
+  { name: 'Takaisin etusivulle', href: '/' }
+];
+---
+
+<Layout title={`${data.title} - ${biz.name}`} navLinks={navLinks} preset={SITE_THEME}>
+  <main class="min-h-screen bg-gray-50 py-32">
+    <div class="mx-auto max-w-3xl px-6 lg:px-8 bg-white p-8 sm:p-12 rounded-[var(--radius-box)] shadow-sm ring-1 ring-gray-200">
+      
+      <h1 class="text-3xl font-extrabold text-gray-900 font-heading mb-2">{data.title}</h1>
+      <p class="text-sm text-gray-500 font-body mb-8">Päivitetty viimeksi: {data.lastUpdated}</p>
+      
+      <div class="prose prose-slate max-w-none font-body space-y-8 text-gray-600">
+        
+        <p class="leading-relaxed">
+          Tervetuloa yrityksen <strong>{biz.name}</strong> verkkosivuille. Käyttämällä tätä sivustoa sitoudut noudattamaan alla olevia ehtoja.
+        </p>
+
+        {data.sections.map((section) => (
+          <section>
+            <h2 class="text-xl font-bold text-gray-900 font-heading mb-3">{section.heading}</h2>
+            <div class="space-y-3">
+              {section.paragraphs.map((p) => (
+                <p class="leading-relaxed">{p}</p>
+              ))}
+            </div>
+          </section>
+        ))}
+
+      </div>
+
+    </div>
+  </main>
+
+  <Footer preset={SITE_THEME} />
+</Layout>

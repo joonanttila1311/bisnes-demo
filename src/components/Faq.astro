@@ -1,0 +1,61 @@
+---
+import { CONTENT } from '../information/config';
+import { ChevronDown } from 'lucide-react';
+
+interface Props {
+  preset?: 'default' | 'remontti' | 'kahvila' | 'siivous';
+}
+
+const { preset = 'default' } = Astro.props as Props;
+const data = CONTENT[preset].faq;
+
+if (!data || !data.items) return null;
+---
+
+<section id="faq" class="relative overflow-hidden bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-3xl px-6 lg:px-8">
+    
+    <div class="text-center mb-16">
+      <span class="inline-block mb-4 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest bg-brand/10 text-brand font-heading">
+        {data.eyebrow}
+      </span>
+      <h2 class="mb-5 font-extrabold text-gray-900 font-heading" style="font-size: clamp(1.875rem, 4vw, 3rem);">
+        {data.title}
+      </h2>
+      <p class="text-lg text-gray-500 font-body">
+        {data.subtitle}
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      {data.items.map((item, index) => (
+        <details class="group rounded-(--radius-box) border border-gray-200 bg-white shadow-sm open:shadow-md transition-all duration-300">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 p-6 font-bold text-gray-900 font-heading marker:content-none hover:text-brand transition-colors">
+            {item.question}
+            <span class="transition-transform duration-300 group-open:-rotate-180 text-brand">
+              <ChevronDown className="h-5 w-5" />
+            </span>
+          </summary>
+          <div class="border-t border-gray-100 p-6 pt-4 text-gray-600 font-body leading-relaxed animate-fade-in">
+            {item.answer}
+          </div>
+        </details>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* Piilotetaan selaimen oletusnuoli details-tagista */
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+</style>
