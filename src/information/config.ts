@@ -2,7 +2,9 @@
 
 export type Theme = 'default' | 'remontti' | 'kahvila' | 'siivous';
 
-export const ACTIVE_THEME: Theme = 'siivous';
+export const ACTIVE_THEME: Theme = 'remontti';
+
+export const IS_DEMO_MODE = true;
 
 // ── 1. YRITYKSEN PERUSTIEDOT (Yhteystiedot, Somat, Aukioloajat) ──
 interface BusinessData {

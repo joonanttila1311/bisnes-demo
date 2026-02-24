@@ -1,29 +1,42 @@
 ---
+// src/pages/[theme].astro
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import Services from '../components/Services.astro';
 import Pricing from '../components/Pricing.astro';
 import About from '../components/About.astro';
+import Gallery from '../components/Gallery.astro';
+import FAQ from '../components/Faq.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
-import Gallery from '../components/Gallery.astro';
-import Faq from '../components/Faq.astro';
 import ThemeSwitcher from '../components/ThemeSwitcher.astro';
 
-// 1. TUO TÄMÄ:
-import { BUSINESS_CONFIG, ACTIVE_THEME, IS_DEMO_MODE} from '../information/config';
+import { BUSINESS_CONFIG, type Theme, IS_DEMO_MODE } from '../information/config';
 
-// 2. VALITSE TEEMA:
-const SITE_THEME = IS_DEMO_MODE ? 'default' : ACTIVE_THEME;
+if (!IS_DEMO_MODE) {
+  return Astro.redirect('/');
+}
 
-// 3. MÄÄRITTELE NÄMÄ (Tämä puuttui todennäköisesti):
+// 1. Kerrotaan Astrolle, mitkä demosivut haluamme rakentaa
+export function getStaticPaths() {
+  return [
+    { params: { theme: 'remontti' } },
+    { params: { theme: 'kahvila' } },
+    { params: { theme: 'siivous' } },
+  ];
+}
+
+// 2. Napataan teema suoraan osoitteesta (esim. url /kahvila -> theme = 'kahvila')
+// TÄMÄ ON DEMON TAIKA: Emme käytä ACTIVE_THEME -muuttujaa tässä!
+const { theme } = Astro.params;
+const SITE_THEME = theme as Theme;
+
+// 3. Haetaan data configista
 const biz = BUSINESS_CONFIG[SITE_THEME];
 const companyFull = `${biz.name} ${biz.legalName}`.trim();
 
-// ── NAVIGAATIO LOGIIKKA ──
-type NavLink = { name: string; href: string };
-
-let navLinks: NavLink[] = [
+// 4. Määritellään navigaatio
+const navLinks = [
   { name: 'Etusivu', href: '#' },
   { name: 'Palvelut', href: '#services' },
   { name: SITE_THEME === 'kahvila' ? 'Menu' : 'Hinnasto', href: '#pricing' },
@@ -35,23 +48,18 @@ let navLinks: NavLink[] = [
 const heroTitle = SITE_THEME === 'kahvila' ? 'Tuoretta kahvia & tunnelmaa' : undefined;
 ---
 
-<Layout title={`${companyFull} - Etusivu`} navLinks={navLinks} preset={SITE_THEME}>
+<Layout title={`${companyFull} - Demo`} navLinks={navLinks} preset={SITE_THEME}>
   <main>
     <Hero preset={SITE_THEME} title={heroTitle} />
-    
     <Services preset={SITE_THEME} />
-
     <Pricing preset={SITE_THEME} />
-
     <About preset={SITE_THEME} />
-
-    <Gallery preset={SITE_THEME} /> 
-
-    <Faq preset={SITE_THEME} /> 
-    
+    <Gallery preset={SITE_THEME} />
+    <FAQ preset={SITE_THEME} />
     <Contact preset={SITE_THEME} />
   </main>
 
   <Footer preset={SITE_THEME} companyName={companyFull} />
-  <ThemeSwitcher preset={SITE_THEME} />
+  
+  <ThemeSwitcher />
 </Layout>
